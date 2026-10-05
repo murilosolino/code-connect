@@ -1,0 +1,30 @@
+#!/bin/sh
+# Pre-commit: roda go fmt e go vet no backend. O commit é abortado se o vet falhar.
+# Usa o Go local se existir; senão, o container do backend (docker compose).
+
+root=$(git rev-parse --show-toplevel) || exit 1
+cd "$root" || exit 1
+
+staged=$(git diff --cached --name-only --diff-filter=ACM -- 'backend/*.go')
+[ -z "$staged" ] && exit 0
+
+if command -v go >/dev/null 2>&1; then
+  run() { (cd backend && "$@"); }
+elif docker compose ps --status running --services 2>/dev/null | grep -qx backend; then
+  run() { docker compose exec -T backend "$@"; }
+else
+  echo "pre-commit: Go não encontrado e o container do backend não está rodando (make up)." >&2
+  exit 1
+fi
+
+echo "pre-commit: go fmt"
+run go fmt ./... || exit 1
+
+# go fmt reescreve arquivos; re-adiciona os que já estavam no stage
+for f in $staged; do git add -- "$f"; done
+
+echo "pre-commit: go vet"
+if ! run go vet ./...; then
+  echo "pre-commit: go vet encontrou problemas. Commit abortado." >&2
+  exit 1
+fi

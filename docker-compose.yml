@@ -1,0 +1,83 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: cc-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: UTC
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    container_name: cc-backend
+    restart: unless-stopped
+    environment:
+      API_PORT: ${API_PORT:-8080}
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+    ports:
+      - "${API_PORT:-8080}:${API_PORT:-8080}"
+    volumes:
+      - ./backend:/app
+      - go_mod_cache:/go/pkg/mod
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+    container_name: cc-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_PROXY_TARGET: http://backend:${API_PORT:-8080}
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    depends_on:
+      - backend
+
+  # Cliente MySQL interativo: `make db-cli` (docker compose run --rm mysql-cli)
+  mysql-cli:
+    image: mysql:latest
+    container_name: cc-mysql-cli
+    profiles: ["tools"]
+    stdin_open: true
+    tty: true
+    entrypoint: ["sh", "-c", "exec mysql -h mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE"]
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./db:/db # coloque aqui arquivos .sql e rode `source /db/arquivo.sql`
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  go_mod_cache:
+  frontend_node_modules:
