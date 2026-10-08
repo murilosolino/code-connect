@@ -7,9 +7,14 @@ export function normalizeText(value: string): string {
     .trim()
 }
 
+/** Só a palavra: "Conexão" para 1, "Conexões" para os demais. */
+export function pluralWord(count: number, singular: string, plural: string): string {
+  return count === 1 ? singular : plural
+}
+
 /** "1 Projeto" / "3 Projetos". */
 export function pluralize(count: number, singular: string, plural: string): string {
-  return `${count} ${count === 1 ? singular : plural}`
+  return `${count} ${pluralWord(count, singular, plural)}`
 }
 
 /** O handle é guardado sem "@"; o "@" é só de exibição. */

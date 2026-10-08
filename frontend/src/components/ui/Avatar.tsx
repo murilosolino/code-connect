@@ -2,10 +2,13 @@ import { cx } from '../../lib/cx'
 
 type Size = 'sm' | 'profile'
 
+const base = 'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full'
+
 const sizes = {
-  sm: 'size-avatar-sm text-paragraph-small',
+  sm: 'size-avatar-sm text-paragraph-small font-semibold text-cinza-escuro',
   /** 160px abaixo de `sm`, 208px até `lg` e 254px a partir de `lg` (DESIGN.md §5). */
-  profile: 'size-avatar-profile-sm sm:size-avatar-profile-md lg:size-avatar-profile-lg text-subtitle',
+  profile:
+    'size-avatar-profile-sm sm:size-avatar-profile-md lg:size-avatar-profile-lg bg-cinza text-heading-small font-medium text-cinza-claro lg:text-heading',
 } satisfies Record<Size, string>
 
 type Props = {
@@ -14,7 +17,7 @@ type Props = {
   /** Foto; sem ela, mostra as iniciais. */
   src?: string
   size?: Size
-  /** `onLight`: fundo mais escuro, para usar sobre superfícies claras (comentários). */
+  /** `onLight`: fundo mais escuro, para usar sobre superfícies claras (comentários). Só no avatar pequeno. */
   tone?: 'default' | 'onLight'
 }
 
@@ -24,9 +27,9 @@ export function Avatar({ initials, src, size = 'sm', tone = 'default' }: Props) 
     <span
       aria-hidden="true"
       className={cx(
-        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-semibold text-cinza-escuro',
-        tone === 'onLight' ? 'bg-cinza-medio' : 'bg-cinza-claro',
+        base,
         sizes[size],
+        size === 'sm' && (tone === 'onLight' ? 'bg-cinza-medio' : 'bg-cinza-claro'),
       )}
     >
       {src ? (
