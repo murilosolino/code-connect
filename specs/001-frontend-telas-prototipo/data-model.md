@@ -85,7 +85,7 @@ AppState {
   posts:    Post[]              // ordem = "Recentes" (mais novo primeiro)
   comments: Record<postId, Comment[]>
   viewer:   Viewer
-  nextId:   number              // gera novo-<n> e ids de comentário
+  nextId:   number              // gera o id novo-<n> dos projetos publicados
 }
 ```
 
@@ -94,7 +94,7 @@ AppState {
 | Ação | Payload | Efeito |
 | --- | --- | --- |
 | `toggleApproval` | `postId` | Alterna `postId` em `viewer.approvedPostIds` e soma ±1 em `post.approvals`. Id inexistente: sem efeito. |
-| `addComment` | `postId`, `text` | Ignora se `text.trim()` vazio. Acrescenta `{ authorHandle: 'voce', authorInitials: 'V', text: trim, replies: [] }` **ao fim** de `comments[postId]`. |
+| `addComment` | `postId`, `text` | Ignora se `text.trim()` vazio. Acrescenta `{ id: '<postId>-c<n>' (n = quantidade atual + 1), authorHandle: 'voce', authorInitials: 'V', text: trim, replies: [] }` **ao fim** de `comments[postId]`. Não consome `nextId`. |
 | `toggleFollow` | `handle` | Alterna `handle` em `viewer.followingHandles`. "Conexões" exibidas = `user.connections + (seguindo ? 1 : 0)`. |
 | `publishPost` | `{ title, description, tags, imageUrl? }` | Cria `Post { id: novo-<n>, summary = description, authorHandle: viewer.handle, approvals: 0, shares: 0 }` **no início** de `posts`, com `comments[id] = []`. Devolve o `id` para navegar ao detalhe. |
 
