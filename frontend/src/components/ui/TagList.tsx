@@ -16,7 +16,7 @@ export function TagList({ tags, label, onRemove, removeLabelPrefix = 'Remover' }
   return (
     <ul aria-label={label} className="flex flex-wrap gap-2.5">
       {tags.map((tag) => (
-        <li key={tag}>
+        <li key={tag} className="max-w-full min-w-0">
           <Tag
             label={tag}
             onRemove={onRemove ? () => onRemove(tag) : undefined}

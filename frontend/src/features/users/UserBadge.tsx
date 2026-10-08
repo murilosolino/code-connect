@@ -16,7 +16,7 @@ type Props = {
 
 export function UserBadge({ handle, initials, size = 'sm', linked = true, tone = 'default' }: Props) {
   const classes = cx(
-    'inline-flex items-center gap-2 font-semibold break-words no-underline',
+    'inline-flex max-w-full items-center gap-2 font-semibold wrap-anywhere no-underline',
     size === 'sm' ? 'text-paragraph-small' : 'text-paragraph-large',
     tone === 'onLight' ? 'text-cinza-escuro hover:underline' : 'text-text-secondary',
     linked && tone === 'default' && 'hover:text-accent-hover',

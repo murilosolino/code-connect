@@ -10,7 +10,10 @@ type Props = {
 }
 
 export function Tag({ label, onRemove, removeLabel = `Remover ${label}` }: Props) {
-  const base = 'inline-flex items-center rounded-sm px-2 py-1 text-paragraph-small text-on-field sm:text-paragraph'
+  // `wrap-anywhere` (e não `break-words`) porque o chip é flex: só ele reduz o tamanho mínimo e deixa uma
+  // palavra longa quebrar em vez de esticar o chip além do card.
+  const base =
+    'inline-flex max-w-full items-center rounded-sm px-2 py-1 text-paragraph-small wrap-anywhere text-on-field sm:text-paragraph'
 
   if (!onRemove) {
     return <span className={cx(base, 'bg-cinza-claro')}>{label}</span>

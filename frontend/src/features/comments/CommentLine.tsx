@@ -16,7 +16,7 @@ export function CommentLine({ authorHandle, authorInitials, text, actions }: Pro
     <div className="flex flex-col gap-2">
       <div className="flex items-start gap-2 text-paragraph-small">
         <Avatar initials={authorInitials} tone="onLight" />
-        <p className="pt-1 break-words">
+        <p className="min-w-0 pt-1 wrap-anywhere">
           <strong className="font-semibold">{formatHandle(authorHandle)}</strong> {text}
         </p>
       </div>
