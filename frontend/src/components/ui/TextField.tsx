@@ -24,8 +24,9 @@ export function TextField({
   const errorId = `${id}-error`
 
   const fieldClasses = cx(
-    'w-full rounded-sm bg-field-bg px-4 py-2 text-paragraph-small text-on-field placeholder:text-on-field',
-    type === 'password' && 'text-grafite',
+    'w-full rounded-sm bg-field-bg px-4 py-2 text-paragraph-small placeholder:text-on-field',
+    // Senha digitada em `grafite` (DESIGN.md, Input); as demais em `on-field`. Exclusivos para não disputar a cor.
+    type === 'password' ? 'text-grafite' : 'text-on-field',
     error && 'shadow-field-error',
   )
   const accessibility = {

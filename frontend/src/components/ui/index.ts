@@ -1,6 +1,7 @@
 /** Primitivos do design system. `Action` é interno: use `Button`, `TextLink` ou `NavItem`. */
 export { Avatar } from './Avatar'
 export { Button } from './Button'
+export { Checkbox } from './Checkbox'
 export { CodeEditor } from './CodeEditor'
 export { EmptyState } from './EmptyState'
 export { FieldError } from './FieldError'

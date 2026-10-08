@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { email, projectSchema, required, validate } from './validation'
+import { email, loginSchema, projectSchema, required, signupSchema, validate } from './validation'
 
 describe('required', () => {
   it('devolve a mensagem para vazio e para só espaços', () => {
@@ -63,5 +63,38 @@ describe('projectSchema', () => {
 
   it('aceita nome e descrição preenchidos', () => {
     expect(validate(projectSchema, { title: 'Meu projeto', description: 'Uma descrição' })).toEqual({})
+  })
+})
+
+describe('loginSchema', () => {
+  it('exige email ou usuário e senha', () => {
+    expect(validate(loginSchema, { identifier: '', password: '' })).toEqual({
+      identifier: 'Informe seu email ou usuário.',
+      password: 'Informe sua senha.',
+    })
+  })
+
+  it('aceita um usuário que não é email', () => {
+    expect(validate(loginSchema, { identifier: 'usuario123', password: 'x' })).toEqual({})
+  })
+})
+
+describe('signupSchema', () => {
+  it('exige nome, email e senha', () => {
+    expect(validate(signupSchema, { name: '', email: '', password: '' })).toEqual({
+      name: 'Informe seu nome.',
+      email: 'Informe seu email.',
+      password: 'Informe sua senha.',
+    })
+  })
+
+  it('valida o formato do email', () => {
+    expect(validate(signupSchema, { name: 'Ana', email: 'ana@', password: 'x' })).toEqual({
+      email: 'Digite um email válido.',
+    })
+  })
+
+  it('aceita os dados preenchidos', () => {
+    expect(validate(signupSchema, { name: 'Ana', email: 'ana@ex.com', password: 'x' })).toEqual({})
   })
 })

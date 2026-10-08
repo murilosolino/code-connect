@@ -2,13 +2,15 @@ import { cx } from '../../lib/cx'
 import { Action, type ActionProps } from './Action'
 import { Icon, type IconName } from './Icon'
 
-type Variant = 'default' | 'form'
+type Variant = 'default' | 'form' | 'accent'
 
 const variants = {
   /** "Limpar tudo", "Voltar ao feed": cinza, verde e sublinhado no hover. */
   default: 'text-paragraph max-sm:text-paragraph-small text-text-secondary no-underline hover:text-accent hover:underline',
   /** Links dentro de formulários ("Esqueci a senha"): sempre sublinhados. */
   form: 'text-paragraph-small text-text-primary underline',
+  /** Chamada no rodapé de Login/Cadastro ("Crie seu cadastro!"). */
+  accent: 'text-paragraph font-semibold text-accent underline hover:text-accent-hover',
 } satisfies Record<Variant, string>
 
 export type TextLinkProps = { variant?: Variant; icon?: IconName } & ActionProps

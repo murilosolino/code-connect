@@ -23,8 +23,11 @@
   }
 }
 
-/* Ícones: Material Symbols usados como ligadura de texto (ver componente Icon) */
-.material-symbols-outlined {
+/* Ícones: Material Symbols usados como ligadura de texto (ver componente Icon).
+   A fonte vem do <link> do index.html. Usamos uma classe própria (como o `.mi` do protótipo) e
+   não `.material-symbols-outlined`: a folha do Google define `font-size: 24px` sem layer, o que
+   venceria os utilitários de tamanho do Tailwind (text-icon-sm/md/lg). */
+.material-icon {
   font-family: "Material Symbols Outlined";
   font-weight: normal;
   font-style: normal;

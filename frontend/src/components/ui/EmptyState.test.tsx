@@ -25,7 +25,7 @@ describe('EmptyState', () => {
 
   it('esconde o ícone dos leitores de tela', () => {
     const { container } = renderWithProviders(<EmptyState icon="info" title="Perfil não encontrado" />)
-    expect(container.querySelector('.material-symbols-outlined')).toHaveAttribute('aria-hidden', 'true')
+    expect(container.querySelector('.material-icon')).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('com `action` mostra um link para o destino', () => {

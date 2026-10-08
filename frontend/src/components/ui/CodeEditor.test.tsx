@@ -15,6 +15,18 @@ describe('CodeEditor', () => {
     expect(screen.getByRole('img', { name: 'Trecho de código do projeto Vendas' })).toBeInTheDocument()
   })
 
+  it('destaca as palavras pedidas sem alterar o texto do código', () => {
+    const source = 'const x = true;\nconst y = false;'
+    const { container } = render(<CodeEditor code={source} decorative highlight={['const', 'true']} />)
+    const pre = container.querySelector('pre')!
+    expect(pre.textContent).toBe(source)
+    expect([...pre.querySelectorAll('span')].map((span) => span.textContent)).toEqual([
+      'const',
+      'true',
+      'const',
+    ])
+  })
+
   it('com `decorative` fica escondido dos leitores de tela', () => {
     const { container } = render(<CodeEditor code={code} decorative />)
     expect(screen.queryByRole('img')).not.toBeInTheDocument()

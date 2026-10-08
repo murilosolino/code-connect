@@ -37,7 +37,7 @@ type Props = {
 /** Ícone decorativo: sempre escondido dos leitores de tela (o nome vem do controle que o contém). */
 export function Icon({ name, size = 'md', className }: Props) {
   return (
-    <span aria-hidden="true" className={cx('material-symbols-outlined', sizes[size], className)}>
+    <span aria-hidden="true" className={cx('material-icon', sizes[size], className)}>
       {name}
     </span>
   )

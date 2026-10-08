@@ -41,3 +41,16 @@ export const projectSchema = {
   title: [required('Informe o nome do projeto.')],
   description: [required('Informe a descrição do projeto.')],
 } satisfies Schema<'title' | 'description'>
+
+/** Login (FR-025). */
+export const loginSchema = {
+  identifier: [required('Informe seu email ou usuário.')],
+  password: [required('Informe sua senha.')],
+} satisfies Schema<'identifier' | 'password'>
+
+/** Cadastro (FR-025). */
+export const signupSchema = {
+  name: [required('Informe seu nome.')],
+  email: [required('Informe seu email.'), email('Digite um email válido.')],
+  password: [required('Informe sua senha.')],
+} satisfies Schema<'name' | 'email' | 'password'>
