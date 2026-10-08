@@ -54,6 +54,14 @@
   --text-code: 15px;
   --text-code--line-height: 1.6;
 
+  /* Ícones Material (ligadura de texto): 15px nas tags/erros, 24px nas ações, 32px no menu */
+  --text-icon-sm: 15px;
+  --text-icon-sm--line-height: 1;
+  --text-icon-md: 24px;
+  --text-icon-md--line-height: 1;
+  --text-icon-lg: 32px;
+  --text-icon-lg--line-height: 1;
+
   /* Raios */
   --radius-sm: 4px;
   --radius-md: 8px;

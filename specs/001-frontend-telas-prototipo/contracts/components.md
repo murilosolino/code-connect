@@ -23,7 +23,7 @@ pages/  →  features/  →  components/layout  →  components/ui  →  lib/
 | --- | --- | --- |
 | `Icon` | `name: IconName`, `size?: 'sm' \| 'md' \| 'lg'` (15/24/32px) | Sempre `aria-hidden`. `IconName` é união literal dos ícones usados. |
 | `Action` *(interno)* | `to?` \| `href?` \| `onClick?`/`type?`, `children`, `className` | Base polimórfica: `to` → `Link`, `href` → `<a>`, senão `<button type="button">`. Usado por `Button`, `TextLink`, `NavItem`. |
-| `Button` | `variant: 'primary' \| 'secondary' \| 'tertiary'`, `size?: 'compact' \| 'md' \| 'lg'`, `icon?: IconName`, `iconPosition?: 'start' \| 'end'`, `fullWidth?`, `pressed?`, + props de `Action` | `lg` = 22px Regular (Publicar do menu); `compact` = "Seguir". Borda inset (`shadow-outline`) no secundário/terciário. `pressed` → `aria-pressed`. |
+| `Button` | `variant: 'primary' \| 'secondary' \| 'tertiary'`, `size?: 'md' \| 'lg'`, `icon?: IconName`, `iconPosition?: 'start' \| 'end'`, `fullWidth?`, `pressed?`, + props de `Action` | `lg` = 22px Regular (Publicar do menu). "Seguir" é um `Button tertiary` comum. Borda inset (`shadow-outline`) no secundário/terciário. `pressed` → `aria-pressed`. |
 | `TextLink` | `variant?: 'default' \| 'form'`, `icon?`, + props de `Action` | `default`: `text-secondary`, hover `accent` sublinhado ("Limpar tudo", "Voltar ao feed"). `form`: `text-primary` sempre sublinhado ("Esqueci a senha", "Crie seu cadastro!"). Com `onClick` vira `<button>` (ação), com `to` vira link (navegação). |
 | `TextField` | `label`, `type?: 'text' \| 'email' \| 'password' \| 'textarea'`, `error?`, `hideLabel?`, `ref`, + props nativas | `id` via `useId`; `<label htmlFor>`; `aria-invalid` + `aria-describedby` quando `error`; renderiza `FieldError`. Estado de erro = `shadow-field-error` (FR-026). |
 | `FieldError` | `id`, `message?` | Ícone `error` 15px + texto 15px `offwhite`, em região `aria-live="polite"`. Reusado por `TextField` e `ImageUpload`. |
@@ -31,13 +31,13 @@ pages/  →  features/  →  components/layout  →  components/ui  →  lib/
 | `SearchBox` | `value`, `onChange`, `label` | `<input type="search">` com `<label class="sr-only">`; placeholder "Digite o que você procura"; foco/hover = borda inset 1px. |
 | `Tag` | `label`, `onRemove?` | Sem `onRemove` = prévia (`bg-cinza-claro`). Com `onRemove` = botão `close` com `aria-label="Remover <rótulo>"`. |
 | `TagList` | `tags: string[]`, `onRemove?`, `label` | `<ul aria-label>` com `flex-wrap gap-2.5`; repassa `onRemove(tag)` a cada `Tag`. |
-| `Tabs` | `items: {id, label}[]`, `value`, `onChange`, `label`, `panelId` | `role="tablist"`/`tab`, `aria-selected`, `aria-controls`, setas ←/→ movem e ativam (roving tabindex). |
-| `Avatar` | `initials`, `src?`, `size: 'sm' \| 'profile'` | `profile` é responsivo 160px (< 640) / 208px (640–1023) / 254px (≥ 1024). Decorativo quando o nome está ao lado (`alt=""`). |
+| `Tabs` | `items: {id, label}[]`, `value`, `onChange`, `label`, `panelId` (+ `tabId(panelId, id)` para o `aria-labelledby` do painel) | `role="tablist"`/`tab`, `aria-selected`, `aria-controls`, setas ←/→ movem e ativam (roving tabindex). |
+| `Avatar` | `initials`, `src?`, `size: 'sm' \| 'profile'` | `sm` mostra só a primeira letra das iniciais (como nos protótipos); `profile` mostra todas e é responsivo 160px (< 640) / 208px (640–1023) / 254px (≥ 1024). Decorativo quando o nome está ao lado (`alt=""`). |
 | `Logo` | — | Texto "CodeConnect" 26px/600 (FR-024) dentro de link para `/`. |
 | `Surface` | `as?`, `padding?: 'md' \| 'lg' \| 'menu'`, `className?` | Superfície `bg-surface rounded-md`. Usado por menu, card do formulário de login, card do Sobre, corpo do `PostCard`. |
 | `MediaPanel` | `rounded?: 'all' \| 'top'`, `padding?`, `children` | Área `bg-card-media`. Usado pelo topo do `PostCard`, banners de Login/Cadastro e Sobre, área de upload do Publicar. |
 | `MediaPlaceholder` | `children?` | Espaço reservado do protótipo do Publicar: borda interna 1px `cinza-escuro` (`shadow-outline-dark`), `rounded-md`, ícone `code` 32px e texto `text-cinza-escuro`, centralizado, `gap-2`, padding 24. Sem `children` = só o ícone (card sem imagem). Usado por `ImageUpload` e `PostMedia`. |
-| `CodeEditor` | `code`, `size: 'card' \| 'page' \| 'banner'` | Três pontos em `cinza`, `<pre>` Roboto Mono 15px/1.6 `cinza-claro`, `shadow-editor`. `aria-hidden` quando é ilustração (banners); nos cards tem `aria-label="Trecho de código do projeto <título>"`. |
+| `CodeEditor` | `code`, `size: 'card' \| 'page' \| 'banner'`, `label` (nome acessível) ou `decorative` | Três pontos em `cinza`, `<pre>` Roboto Mono 15px/1.6 `cinza-claro`, `shadow-editor`. `decorative` (banners) → `aria-hidden`; nos cards `label="Trecho de código do projeto <título>"` → `role="img"`. |
 | `EmptyState` | `icon: IconName`, `title`, `description?`, `action?: { label, to }` | FR-029: `Surface` padding 24, ícone 32px `text-secondary`, título 22px/600 `text-emphasis`, texto 15px `text-secondary`, ação `Button variant="secondary"`. Busca sem resultado, abas vazias do perfil, projeto/perfil/rota não encontrados. |
 
 ## 2. Layout (`src/components/layout`)
