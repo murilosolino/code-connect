@@ -4,7 +4,7 @@ import { renderWithProviders } from '../test/renderWithProviders'
 import { routes } from './router'
 
 /** Endereços existentes: cada user story acrescenta o seu (SC-006: nenhuma chamada à API). */
-const KNOWN_PATHS = ['/', '/projeto/vendas', '/qualquer-coisa']
+const KNOWN_PATHS = ['/', '/projeto/vendas', '/publicar', '/qualquer-coisa']
 
 describe('rotas do app', () => {
   it('mostra "Página não encontrada" em um endereço desconhecido, com o caminho de volta', () => {

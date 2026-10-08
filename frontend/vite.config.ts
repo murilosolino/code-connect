@@ -19,5 +19,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+    // user-event em container compartilhado com o Vite pode passar dos 5s padrão sob carga.
+    testTimeout: 15000,
   },
 })

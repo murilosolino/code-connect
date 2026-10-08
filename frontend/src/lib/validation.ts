@@ -35,3 +35,9 @@ export function validate<K extends string>(
   }
   return errors
 }
+
+/** Formulário "Novo projeto" (FR-025). */
+export const projectSchema = {
+  title: [required('Informe o nome do projeto.')],
+  description: [required('Informe a descrição do projeto.')],
+} satisfies Schema<'title' | 'description'>

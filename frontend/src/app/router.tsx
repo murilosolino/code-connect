@@ -3,6 +3,7 @@ import { AppLayout } from '../components/layout/AppLayout'
 import { FeedPage } from '../pages/FeedPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 import { ProjectPage } from '../pages/ProjectPage'
+import { PublishPage } from '../pages/PublishPage'
 
 /**
  * Árvore de rotas (specs/001-frontend-telas-prototipo/contracts/routes.md).
@@ -14,6 +15,7 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <FeedPage /> },
       { path: 'projeto/:id', element: <ProjectPage /> },
+      { path: 'publicar', element: <PublishPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

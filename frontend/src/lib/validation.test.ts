@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { email, required, validate } from './validation'
+import { email, projectSchema, required, validate } from './validation'
 
 describe('required', () => {
   it('devolve a mensagem para vazio e para só espaços', () => {
@@ -44,5 +44,24 @@ describe('validate', () => {
     expect(validate(schema, { nome: 'Ana', email: 'ana@', senha: 'x' })).toEqual({
       email: 'Email inválido.',
     })
+  })
+})
+
+describe('projectSchema', () => {
+  it('exige o nome do projeto e a descrição', () => {
+    expect(validate(projectSchema, { title: '', description: '' })).toEqual({
+      title: 'Informe o nome do projeto.',
+      description: 'Informe a descrição do projeto.',
+    })
+  })
+
+  it('trata só espaços como vazio', () => {
+    expect(validate(projectSchema, { title: '   ', description: ' ok ' })).toEqual({
+      title: 'Informe o nome do projeto.',
+    })
+  })
+
+  it('aceita nome e descrição preenchidos', () => {
+    expect(validate(projectSchema, { title: 'Meu projeto', description: 'Uma descrição' })).toEqual({})
   })
 })

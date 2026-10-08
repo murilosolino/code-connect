@@ -67,7 +67,7 @@ pages/  →  features/  →  components/layout  →  components/ui  →  lib/
 | `comments/CommentThread` | `comments: Comment[]` | `CommentLine`, `TextLink`/`Button` | Lista com "Ver/Ocultar respostas" (estado local; o primeiro com respostas começa aberto). |
 | `comments/CommentLine` | `authorHandle`, `authorInitials`, `text`, `actions?` | `Avatar` (tom `onLight`) | **Mesmo componente** para comentário e resposta (resposta = recuo de 40px). O `@handle` é texto em destaque, não link (como no protótipo). |
 | `comments/CommentForm` | `onSubmit(text): boolean` | `TextField`, `Button` | Detalhe; Enter ou "Comentar". |
-| `publish/ImageUpload` | `file`, `onChange(file \| null)`, `error?` | `MediaPanel`, `MediaPlaceholder`/`<img>`, `Button`, `FieldError` | Publicar. Usa `useObjectUrl` e `validateImageFile`. |
+| `publish/ImageUpload` | `onChange(imageUrl \| undefined)` | `MediaPanel`, `MediaPlaceholder`/`<img>`, `Button`, `FieldError` | Publicar. Usa `useObjectUrl` e `validateImageFile`. |
 | `publish/TagInput` | `tags`, `onChange(tags)` | `TextField`, `TagList` | Publicar; Enter adiciona sem duplicar, × remove. |
 
 ## 4. Hooks e utilitários compartilhados
