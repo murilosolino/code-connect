@@ -193,39 +193,18 @@ Em mobile reduza: ícone do search 32→24px, texto do search 22→15px, rótulo
 
 ## 7. Como aplicar no projeto (Tailwind 4)
 
-Hoje `frontend/src/index.css` só importa o Tailwind e `App.tsx` usa `slate-*`. Ao iniciar a implementação, declare os tokens em `index.css`:
+Os tokens ficam em `frontend/src/styles/theme.css` (bloco `@theme`), importado por `frontend/src/styles/index.css`. **Use só estes tokens na UI**: nada de hex avulso, `slate-*` ou valores arbitrários (`w-[…]`).
 
-```css
-@import "tailwindcss";
+- **Cores**: a paleta base (`verde-destaque`, `cinza-escuro`…) e os tokens semânticos usados nos componentes (`bg-page`, `bg-surface`, `bg-card-media`, `text-primary`, `text-emphasis`, `text-secondary`, `accent`, `accent-hover`, `on-accent`, `field-bg`, `on-field`, `border-inactive`, `focus-ring`, `divider`). Nas classes: `bg-bg-surface`, `text-text-secondary`, `bg-accent`…
+- **Tipografia**: `font-sans` (Prompt), `font-mono` (Roboto Mono) e a escala `text-heading`, `text-heading-small`, `text-subtitle-large`, `text-subtitle`, `text-paragraph-large`, `text-paragraph`, `text-paragraph-small`, `text-label`, `text-code`, cada uma com seu line-height.
+- **Ícones**: `text-icon-sm` (15px), `text-icon-md` (24px) e `text-icon-lg` (32px).
+- **Raios e sombras**: `rounded-sm` (4px), `rounded-md` (8px), `shadow-editor`; bordas internas de 1px que mantêm a altura do elemento: `shadow-outline`, `shadow-outline-accent`, `shadow-outline-hover`, `shadow-outline-dark`; e `shadow-field-error` (2px, Pendência 8).
+- **Medidas nomeadas**: avatares (`size-avatar-sm`, `size-avatar-profile-sm/md/lg`), `h-textarea` (161px), larguras do card (`max-w-card-feed` 486px, `max-w-card-page` 993px) e de leitura (`max-w-copy`, 72ch).
+- **Utilitários** (`@utility`): `px-page` (padding lateral `clamp(16px, 5vw, 80px)`) e `grid-cards` (colunas de no mínimo 400px, gap 24px).
+- **Ícones Material Symbols**: a fonte vem do `<link>` do `frontend/index.html` (com `display=block`), mas os ícones usam a classe própria `.material-icon` (`index.css`), **não** `.material-symbols-outlined`: a folha do Google define `font-size: 24px` fora de qualquer layer e vence os utilitários de tamanho.
+- **Foco**: regra global `:focus-visible` em `index.css` (anel sólido de 2px `focus-ring`, offset 2px); o `SearchBox` usa borda interna de 1px.
 
-@theme {
-  --color-verde-destaque: #81fe88;
-  --color-verde-pastel: #bfffc3;
-  --color-verde-petroleo: #132e35;
-  --color-grafite: #00090e;
-  --color-cinza-escuro: #171d1f;
-  --color-cinza: #3e3e3f;
-  --color-cinza-medio: #888888;
-  --color-cinza-claro: #bcbcbc;
-  --color-offwhite: #e1e1e1;
-
-  --font-sans: "Prompt", sans-serif;
-  --font-mono: "Roboto Mono", monospace;
-
-  --text-label: 12.5px;
-  --text-paragraph-sm: 15px;
-  --text-paragraph: 18px;
-  --text-paragraph-lg: 22px;
-  --text-subtitle: 26px;
-  --text-subtitle-lg: 31px;
-  --text-heading-sm: 37px;
-  --text-heading: 44px;
-
-  --shadow-editor: 0 16px 24px 0 rgb(0 0 0 / 0.24);
-}
-```
-
-Carregue Prompt (400/500/600), Roboto Mono e Material Icons (ex.: Google Fonts) no `index.html`. Crie componentes React reutilizáveis (`Button`, `Input`, `Tag`, `Card`…) com as variantes acima em vez de repetir classes.
+Prompt (400/500/600), Roboto Mono e Material Symbols são carregados no `index.html`. Elementos repetidos são componentes em `frontend/src/components/ui` com variantes (`Button`, `TextField`, `Tag`, `Tabs`…), nunca classes duplicadas nas telas.
 
 ---
 
@@ -237,8 +216,8 @@ Inconsistências/lacunas do Figma para confirmar com design:
 2. **Cinza `#3E3E3F`**: aparece como token, mas o uso exato (divisores/bordas?) não ficou claro.
 3. **Tags em cards**: no Figma o fundo e o texto aparecem ambos `#171D1F` (provável override de instância); o padrão adotado é o da tag (`#888888` / `#171D1F`).
 4. **Topo do card** usa `#848484` na versão página e `#888888` no feed — diferença provavelmente acidental.
-5. **Fundo da página** e **fundo dos comentários** não estão definidos nos nós analisados.
-6. **Menu**: as variantes de página ativa "Feed/Perfil/Sobre/Deslogado" do menu lateral (nós 155:3923, 155:3940, 155:3957, 585:2641) ainda não foram lidas.
+5. **Fundo da página** e **fundo dos comentários** não estão definidos nos nós analisados. Adotado o que os protótipos usam: página em `grafite #00090E` (`bg-page`) e bloco de comentários em `offwhite #E1E1E1` com texto `cinza-escuro`.
+6. **Menu**: as variantes de página ativa "Feed/Perfil/Sobre/Deslogado" do menu lateral (nós 155:3923, 155:3940, 155:3957, 585:2641) ainda não foram lidas. Adotado o que o HANDOFF descreve: item da página atual em `verde-destaque` com `aria-current="page"`; o detalhe de um projeto marca "Feed". A variante deslogada do menu não foi implementada (só há a logada).
 7. **Checkbox marcado** (`Check`) e **Paragraph Código** (line-height `100`) não foram detalhados.
    Definição provisória do checkbox marcado (spec `001-frontend-telas-prototipo`, FR-027): caixa
    `24×24`, raio `4px`, borda `2px` `#81FE88` e ícone `check` centralizado em `#81FE88`.
@@ -257,3 +236,11 @@ Inconsistências/lacunas do Figma para confirmar com design:
     este documento (§5) define o tablet com referência de 768px e menu horizontal. Prevalece este
     documento: menu lateral a partir de 1024px; barra horizontal abaixo (rótulo 22px de 640px a
     1023px, 18px abaixo de 640px); avatar do perfil 160 / 208 / 254px nas mesmas faixas.
+12. **Busca do Perfil**: o protótipo desktop tem a busca no topo do perfil; o mobile não. Mantida só a partir de 1024px.
+13. **Filtros iniciais do Feed**: o protótipo mostra os filtros "Front-end", "React" e "Acessibilidade" mas não filtra a lista. Na implementação eles filtram (como pede o HANDOFF), então o feed abre mostrando só os projetos com alguma dessas tags.
+14. **Projetos já aprovados**: nos dados de exemplo a pessoa logada já aprovou "API de autenticação em Node" e "Lista de tarefas com Next.js e Prisma" (alimentam a aba "Aprovados"); por isso esses cards aparecem com o estado aprovado no feed, ao contrário do protótipo.
+15. **Ordem dos botões do Publicar**: no desktop o protótipo mostra Descartar → Publicar; no mobile, Publicar → Descartar. No HTML (ordem de Tab e do leitor de tela) "Publicar" vem sempre primeiro; no desktop a ordem visual é invertida com `flex-row-reverse`, então a ordem do foco difere da visual.
+16. **Card do feed em coluna única**: com uma só coluna e tela larga (tablet, 1024px com menu lateral) o card respeita a largura máxima de 486px e fica alinhado à esquerda; o design não define esse caso.
+17. **Código dos banners no mobile**: o protótipo usa fonte mono de 13px nos banners de Login, Cadastro e Sobre; não há token para esse tamanho, então usa-se `text-code` (15px).
+18. **"Esqueci a senha"** é exibido como link, mas não há fluxo de recuperação nos protótipos; o link permanece na própria tela de Login.
+19. **Avatar pequeno** mostra só a primeira letra das iniciais (como nos protótipos); o avatar do perfil mostra as duas ("JO") em `cinza-claro` sobre `cinza`.
