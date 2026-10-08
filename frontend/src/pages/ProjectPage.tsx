@@ -1,5 +1,5 @@
 import { useParams } from 'react-router'
-import { EmptyState, TextLink } from '../components/ui'
+import { NotFoundState, TextLink } from '../components/ui'
 import { useAppActions, useComments, usePost } from '../data/store/hooks'
 import { CommentForm } from '../features/comments/CommentForm'
 import { CommentThread } from '../features/comments/CommentThread'
@@ -17,12 +17,9 @@ export function ProjectPage() {
 
   if (!post) {
     return (
-      <EmptyState
-        icon="info"
+      <NotFoundState
         title="Projeto não encontrado"
         description="Confira o endereço ou volte ao feed para ver outros projetos."
-        action={{ label: 'Voltar ao feed', to: '/' }}
-        headingLevel={1}
       />
     )
   }

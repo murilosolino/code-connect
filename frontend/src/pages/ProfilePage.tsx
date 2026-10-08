@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useParams } from 'react-router'
-import { EmptyState, SearchBox, Tabs, tabId } from '../components/ui'
+import { EmptyState, NotFoundState, SearchBox, Tabs, tabId } from '../components/ui'
 import { useAppActions, useUser, useUserPosts } from '../data/store/hooks'
 import { filterPosts } from '../features/posts/filterPosts'
 import { PostGrid } from '../features/posts/PostGrid'
@@ -34,12 +34,9 @@ function ProfileContent({ handle }: { handle: string }) {
 
   if (!user) {
     return (
-      <EmptyState
-        icon="info"
+      <NotFoundState
         title="Perfil não encontrado"
         description="Confira o endereço ou volte ao feed para conhecer outras pessoas."
-        action={{ label: 'Voltar ao feed', to: '/' }}
-        headingLevel={1}
       />
     )
   }

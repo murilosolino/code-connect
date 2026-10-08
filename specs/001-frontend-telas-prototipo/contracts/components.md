@@ -39,6 +39,8 @@ pages/  →  features/  →  components/layout  →  components/ui  →  lib/
 | `MediaPlaceholder` | `children?` | Espaço reservado do protótipo do Publicar: borda interna 1px `cinza-escuro` (`shadow-outline-dark`), `rounded-md`, ícone `code` 32px e texto `text-cinza-escuro`, centralizado, `gap-2`, padding 24. Sem `children` = só o ícone (card sem imagem). Usado por `ImageUpload` e `PostMedia`. |
 | `CodeEditor` | `code`, `size: 'card' \| 'page' \| 'banner'`, `label` (nome acessível) ou `decorative` | Três pontos em `cinza`, `<pre>` Roboto Mono 15px/1.6 `cinza-claro`, `shadow-editor`. `decorative` (banners) → `aria-hidden`; nos cards `label="Trecho de código do projeto <título>"` → `role="img"`. |
 | `EmptyState` | `icon: IconName`, `title`, `description?`, `action?: { label, to }` | FR-029: `Surface` padding 24, ícone 32px `text-secondary`, título 22px/600 `text-emphasis`, texto 15px `text-secondary`, ação `Button variant="secondary"`. Busca sem resultado, abas vazias do perfil, projeto/perfil/rota não encontrados. |
+| `PageTitle` | `children` | `h1` das telas de conteúdo: 31px (mobile) e 37px (desktop). Publicar e Sobre nós. |
+| `NotFoundState` | `title`, `description` | `EmptyState` de página inteira (`h1`, ícone `info`, ação "Voltar ao feed"). Página, projeto e perfil não encontrados. |
 
 ## 2. Layout (`src/components/layout`)
 

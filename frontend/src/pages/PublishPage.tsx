@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { Button, TextField } from '../components/ui'
+import { Button, PageTitle, TextField } from '../components/ui'
 import { useAppActions } from '../data/store/hooks'
 import { ImageUpload } from '../features/publish/ImageUpload'
 import { TagInput } from '../features/publish/TagInput'
@@ -29,9 +29,7 @@ export function PublishPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-subtitle-large font-medium text-text-primary lg:text-heading-small">
-        Novo projeto
-      </h1>
+      <PageTitle>Novo projeto</PageTitle>
       <div className="flex flex-wrap items-start gap-6">
         <div className="min-w-0 flex-1 basis-100">
           <ImageUpload onChange={setImageUrl} />

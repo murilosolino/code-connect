@@ -1,4 +1,12 @@
-import { Button, CodeEditor, Icon, MediaPanel, Surface, type IconName } from '../components/ui'
+import {
+  Button,
+  CodeEditor,
+  Icon,
+  MediaPanel,
+  PageTitle,
+  Surface,
+  type IconName,
+} from '../components/ui'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 const BANNER_CODE = 'const comunidade = devs\n  .map(compartilhar)\n  .map(comentar)\n  .filter(aprender);'
@@ -38,9 +46,7 @@ export function AboutPage() {
 
       <Surface as="article" padding="page" className="flex flex-col gap-8 lg:gap-10">
         <section className="flex flex-col gap-6">
-          <h1 className="text-subtitle-large font-medium text-text-primary lg:text-heading-small">
-            Sobre nós
-          </h1>
+          <PageTitle>Sobre nós</PageTitle>
           <p className={COPY}>
             O CodeConnect é uma rede social para quem programa. Aqui você publica seus projetos,
             mostra o código por trás deles e recebe comentários de outras pessoas desenvolvedoras.
