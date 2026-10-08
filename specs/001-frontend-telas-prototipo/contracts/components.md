@@ -65,7 +65,7 @@ pages/  →  features/  →  components/layout  →  components/ui  →  lib/
 | `users/UserBadge` | `handle`, `initials`, `size?: 'sm' \| 'lg'`, `linked?` | `Avatar` | Autor do card, autor de comentário/resposta, `@handle` do perfil. |
 | `users/ProfileHeader` | `user: UserView`, `onToggleFollow` | `Avatar`, `Button`, `UserBadge` | Perfil. |
 | `comments/CommentThread` | `comments: Comment[]` | `CommentLine`, `TextLink`/`Button` | Lista com "Ver/Ocultar respostas" (estado local; o primeiro com respostas começa aberto). |
-| `comments/CommentLine` | `authorHandle`, `authorInitials`, `text`, `actions?` | `UserBadge` | **Mesmo componente** para comentário e resposta (resposta = recuo de 40px). |
+| `comments/CommentLine` | `authorHandle`, `authorInitials`, `text`, `actions?` | `Avatar` (tom `onLight`) | **Mesmo componente** para comentário e resposta (resposta = recuo de 40px). O `@handle` é texto em destaque, não link (como no protótipo). |
 | `comments/CommentForm` | `onSubmit(text): boolean` | `TextField`, `Button` | Detalhe; Enter ou "Comentar". |
 | `publish/ImageUpload` | `file`, `onChange(file \| null)`, `error?` | `MediaPanel`, `MediaPlaceholder`/`<img>`, `Button`, `FieldError` | Publicar. Usa `useObjectUrl` e `validateImageFile`. |
 | `publish/TagInput` | `tags`, `onChange(tags)` | `TextField`, `TagList` | Publicar; Enter adiciona sem duplicar, × remove. |

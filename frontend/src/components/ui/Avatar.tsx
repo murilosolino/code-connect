@@ -14,15 +14,18 @@ type Props = {
   /** Foto; sem ela, mostra as iniciais. */
   src?: string
   size?: Size
+  /** `onLight`: fundo mais escuro, para usar sobre superfícies claras (comentários). */
+  tone?: 'default' | 'onLight'
 }
 
 /** Decorativo: a pessoa sempre aparece nomeada ao lado (@handle ou nome). */
-export function Avatar({ initials, src, size = 'sm' }: Props) {
+export function Avatar({ initials, src, size = 'sm', tone = 'default' }: Props) {
   return (
     <span
       aria-hidden="true"
       className={cx(
-        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-cinza-claro font-semibold text-cinza-escuro',
+        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-semibold text-cinza-escuro',
+        tone === 'onLight' ? 'bg-cinza-medio' : 'bg-cinza-claro',
         sizes[size],
       )}
     >
