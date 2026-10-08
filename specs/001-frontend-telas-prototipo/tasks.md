@@ -293,13 +293,13 @@ roteiro 5).
 
 ### Tests for User Story 6 ⚠️
 
-- [ ] T119 [P] [US6] Escrever `frontend/src/pages/AboutPage.test.tsx`: `<h1>` "Código em primeiro plano" e o subtítulo; headings "Sobre nós", "Nossa missão", "Como funciona", "Para quem é"; lista "Como funciona" com 3 itens; "Publicar um projeto" é link para `/publicar`; o item "Sobre nós" do menu tem `aria-current="page"`
+- [X] T119 [P] [US6] Escrever `frontend/src/pages/AboutPage.test.tsx`: `<h1>` "Código em primeiro plano" e o subtítulo; headings "Sobre nós", "Nossa missão", "Como funciona", "Para quem é"; lista "Como funciona" com 3 itens; "Publicar um projeto" é link para `/publicar`; o item "Sobre nós" do menu tem `aria-current="page"`
 
 ### Implementation for User Story 6
 
-- [ ] T120 [US6] Implementar `frontend/src/pages/AboutPage.tsx` (banner `MediaPanel` com título, subtítulo e `CodeEditor decorative` do `Sobre.dc.html`; `Surface` com as quatro seções e textos do protótipo; "Como funciona" como `<ul>` com `Icon` `upload`/`code`/`chat`; `Button primary to="/publicar" icon="arrow_forward"` "Publicar um projeto"; `usePageTitle('Sobre nós')`), até T119 passar
-- [ ] T121 [US6] Registrar `/sobre` → `AboutPage` em `frontend/src/app/router.tsx` e acrescentá-la ao teste sem `fetch` em `frontend/src/app/router.test.tsx`
-- [ ] T122 [US6] Validar US6 manualmente em 360 e 1440px contra `Sobre.dc.html` / `Sobre-mobile.dc.html`
+- [X] T120 [US6] Implementar `frontend/src/pages/AboutPage.tsx` (banner `MediaPanel` com título, subtítulo e `CodeEditor decorative` do `Sobre.dc.html`; `Surface` com as quatro seções e textos do protótipo; "Como funciona" como `<ul>` com `Icon` `upload`/`code`/`chat`; `Button primary to="/publicar" icon="arrow_forward"` "Publicar um projeto"; `usePageTitle('Sobre nós')`), até T119 passar
+- [X] T121 [US6] Registrar `/sobre` → `AboutPage` em `frontend/src/app/router.tsx` e acrescentá-la ao teste sem `fetch` em `frontend/src/app/router.test.tsx`
+- [X] T122 [US6] Validar US6 manualmente em 360 e 1440px contra `Sobre.dc.html` / `Sobre-mobile.dc.html`
 
 **Checkpoint**: todas as stories funcionais.
 

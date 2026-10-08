@@ -1,13 +1,15 @@
 import type { ComponentPropsWithoutRef } from 'react'
 import { cx } from '../../lib/cx'
 
-type Padding = 'md' | 'lg' | 'menu'
+type Padding = 'md' | 'lg' | 'menu' | 'page'
 
 const paddings = {
   md: 'p-4',
   lg: 'p-6',
   /** Menu lateral: 40px × 16px. */
   menu: 'px-4 py-10',
+  /** Cartão de página (Sobre nós): 24px × 16px no mobile, 40px a partir de 1024px. */
+  page: 'px-4 py-6 lg:p-10',
 } satisfies Record<Padding, string>
 
 type Props = ComponentPropsWithoutRef<'div'> & {

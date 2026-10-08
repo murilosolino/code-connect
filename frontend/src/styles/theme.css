@@ -89,6 +89,8 @@
   /* Larguras máximas do card de publicação (DESIGN.md, Card de publicação) */
   --container-card-feed: 486px;
   --container-card-page: 993px;
+  /* Largura de leitura dos textos longos da tela Sobre nós (protótipo: 72ch) */
+  --container-copy: 72ch;
 }
 
 /* Padding lateral das telas: 16px a 80px conforme a largura (HANDOFF, AppLayout) */
