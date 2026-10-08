@@ -58,8 +58,8 @@ pages/  →  features/  →  components/layout  →  components/ui  →  lib/
 | --- | --- | --- | --- |
 | `posts/PostCard` | `post: PostView`, `size: 'feed' \| 'page'`, `headingLevel?` | `MediaPanel`, `PostMedia`, `Surface`, `TagList`, `PostActions`, `UserBadge` | Feed, Perfil (feed), Detalhe (page). |
 | `posts/PostMedia` | `post`, `size`, `linkTo?` | `CodeEditor`, `<img>` ou `MediaPlaceholder` | Dentro do `PostCard`. |
-| `posts/PostActions` | `approvals`, `shares`, `comments`, `approved`, `onApprove?`, `commentsTo?` | `Icon` | Aprovar (`aria-pressed`), compartilhar (só contador), comentários (link no feed). Área mínima 44px. |
-| `posts/PostGrid` | `posts: PostView[]`, `empty: ReactNode` | `PostCard`, `grid-cards` | Feed e as duas abas do Perfil. |
+| `posts/PostActions` | `approvals`, `shares`, `comments`, `approved`, `onApprove?`, `commentsTo?` | `Icon` | Aprovar (botão com `aria-pressed`; nome = "Aprovar" + contador), compartilhar (sempre estático: só o contador), comentários (link com `commentsTo`; senão estático). Área mínima 44px nos controles. |
+| `posts/PostGrid` | `posts: PostView[]`, `label: string`, `empty: ReactNode` | `PostCard`, `grid-cards` | Feed e as duas abas do Perfil. |
 | `posts/filterPosts.ts` | `filterPosts(posts, { query, tags, sort })` | — | Feed e busca do Perfil. |
 | `feed/FeedFilters` | `tags`, `onRemove`, `onClear`, `onRestore` | `TagList`, `TextLink` | Só no Feed (filtros + "Limpar tudo"/"Nenhum filtro aplicado." + "Restaurar filtros"). |
 | `users/UserBadge` | `handle`, `initials`, `size?: 'sm' \| 'lg'`, `linked?` | `Avatar` | Autor do card, autor de comentário/resposta, `@handle` do perfil. |

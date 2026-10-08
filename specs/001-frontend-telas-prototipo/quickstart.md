@@ -51,7 +51,7 @@ Shift+Tab, Enter, Espaço, setas nas abas) e confirme o foco visível.
 
 1. **Feed (`/`)** — filtros iniciais aplicados e só projetos com React/Acessibilidade/Front-end;
    remover um filtro e "Limpar tudo" → "Nenhum filtro aplicado." → "Restaurar filtros"; buscar
-   "autenticacao" (sem acento) encontra "API de autenticação em Node" depois de limpar os filtros;
+   "autenticacao" (sem acento) encontra "API de autenticação em Node" (título) e "Lista de tarefas…" (descrição) depois de limpar os filtros;
    busca sem resultado mostra o estado vazio; aba "Populares" ordena por aprovações; grade com 2
    colunas em 1440px e 1 coluna em 1024px ou menos.
 2. **Menu** — cada item navega e fica destacado; em `/projeto/vendas` o item ativo é "Feed";

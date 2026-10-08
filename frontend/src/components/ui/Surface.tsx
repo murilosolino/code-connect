@@ -13,9 +13,27 @@ const paddings = {
 type Props = ComponentPropsWithoutRef<'div'> & {
   as?: 'div' | 'section' | 'article' | 'aside'
   padding?: Padding
+  /** `bottom` arredonda só a base (corpo do card, sob a mídia). */
+  rounded?: 'all' | 'bottom'
 }
 
 /** Superfície do design system: fundo `cinza-escuro` com raio de 8px (cards, menus, formulários). */
-export function Surface({ as: Component = 'div', padding = 'md', className, ...rest }: Props) {
-  return <Component {...rest} className={cx('rounded-md bg-bg-surface', paddings[padding], className)} />
+export function Surface({
+  as: Component = 'div',
+  padding = 'md',
+  rounded = 'all',
+  className,
+  ...rest
+}: Props) {
+  return (
+    <Component
+      {...rest}
+      className={cx(
+        'bg-bg-surface',
+        rounded === 'all' ? 'rounded-md' : 'rounded-b-md',
+        paddings[padding],
+        className,
+      )}
+    />
+  )
 }
