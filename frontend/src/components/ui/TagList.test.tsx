@@ -18,6 +18,18 @@ describe('TagList', () => {
     expect(onRemove).toHaveBeenCalledWith('Vite')
   })
 
+  it('usa o prefixo recebido no nome do botão de remover', () => {
+    render(
+      <TagList
+        label="Filtros aplicados"
+        tags={['React']}
+        onRemove={() => {}}
+        removeLabelPrefix="Remover filtro"
+      />,
+    )
+    expect(screen.getByRole('button', { name: 'Remover filtro React' })).toBeInTheDocument()
+  })
+
   it('não renderiza nada quando não há tags', () => {
     render(<TagList label="Filtros" tags={[]} />)
     expect(screen.queryByRole('list')).not.toBeInTheDocument()

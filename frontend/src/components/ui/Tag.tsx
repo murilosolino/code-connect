@@ -5,9 +5,11 @@ type Props = {
   label: string
   /** Com `onRemove` a tag é removível (botão ×); sem ele é só uma prévia. */
   onRemove?: () => void
+  /** Nome acessível do botão de remover; padrão: "Remover <rótulo>". */
+  removeLabel?: string
 }
 
-export function Tag({ label, onRemove }: Props) {
+export function Tag({ label, onRemove, removeLabel = `Remover ${label}` }: Props) {
   const base = 'inline-flex items-center rounded-sm px-2 py-1 text-paragraph-small text-on-field sm:text-paragraph'
 
   if (!onRemove) {
@@ -19,7 +21,7 @@ export function Tag({ label, onRemove }: Props) {
       {label}
       <button
         type="button"
-        aria-label={`Remover ${label}`}
+        aria-label={removeLabel}
         onClick={onRemove}
         className="-m-1 inline-flex cursor-pointer items-center p-1"
       >

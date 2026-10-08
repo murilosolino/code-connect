@@ -1,13 +1,11 @@
 import { useRef, type KeyboardEvent } from 'react'
 import { cx } from '../../lib/cx'
 
-type Item = { id: string; label: string }
-
-type Props = {
-  items: Item[]
+type Props<Id extends string> = {
+  items: { id: Id; label: string }[]
   /** Id da aba selecionada. */
-  value: string
-  onChange: (id: string) => void
+  value: Id
+  onChange: (id: Id) => void
   /** Nome do grupo de abas para leitores de tela. */
   label: string
   /** Id do painel controlado; o painel deve usar `aria-labelledby={tabId(panelId, value)}`. */
@@ -17,7 +15,7 @@ type Props = {
 export const tabId = (panelId: string, id: string): string => `${panelId}-tab-${id}`
 
 /** Abas no padrão WAI-ARIA: setas ←/→ movem o foco e ativam a aba (com volta circular). */
-export function Tabs({ items, value, onChange, label, panelId }: Props) {
+export function Tabs<Id extends string>({ items, value, onChange, label, panelId }: Props<Id>) {
   const elements = useRef<Record<string, HTMLButtonElement | null>>({})
 
   const activate = (index: number) => {

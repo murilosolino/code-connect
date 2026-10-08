@@ -15,7 +15,7 @@ export function AppLayout() {
   const isDesktop = useMediaQuery(DESKTOP_QUERY)
 
   return (
-    <div className="min-h-screen bg-bg-page px-page py-6 lg:py-10">
+    <div className="min-h-screen bg-bg-page px-4 py-6 md:px-page lg:py-10">
       <a
         href="#conteudo"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-10 focus:rounded-md focus:bg-accent focus:px-4 focus:py-3 focus:text-paragraph focus:font-semibold focus:text-on-accent"

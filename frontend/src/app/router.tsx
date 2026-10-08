@@ -1,5 +1,6 @@
 import { createBrowserRouter, type RouteObject } from 'react-router'
 import { AppLayout } from '../components/layout/AppLayout'
+import { FeedPage } from '../pages/FeedPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 
 /**
@@ -9,7 +10,10 @@ import { NotFoundPage } from '../pages/NotFoundPage'
 export const routes: RouteObject[] = [
   {
     element: <AppLayout />,
-    children: [{ path: '*', element: <NotFoundPage /> }],
+    children: [
+      { index: true, element: <FeedPage /> },
+      { path: '*', element: <NotFoundPage /> },
+    ],
   },
 ]
 

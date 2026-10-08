@@ -22,7 +22,7 @@ export function Avatar({ initials, src, size = 'sm' }: Props) {
     <span
       aria-hidden="true"
       className={cx(
-        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-cinza-medio font-semibold text-cinza-escuro',
+        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-cinza-claro font-semibold text-cinza-escuro',
         sizes[size],
       )}
     >

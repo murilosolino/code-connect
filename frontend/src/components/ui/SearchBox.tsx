@@ -24,7 +24,7 @@ export function SearchBox({ value, onChange, label }: Props) {
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder="Digite o que você procura"
-        className="w-full bg-transparent text-paragraph-small text-cinza-claro outline-none placeholder:text-cinza-claro lg:text-paragraph-large"
+        className="w-full bg-transparent text-paragraph-small text-text-primary outline-none placeholder:text-cinza-claro lg:text-paragraph-large"
       />
     </div>
   )
