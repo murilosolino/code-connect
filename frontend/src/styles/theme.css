@@ -1,0 +1,96 @@
+/* CodeConnect — tokens do tema (Tailwind v4).
+   Origem: codeconnect-design/tailwind-theme.css (pasta local, fora do git) + DESIGN.md.
+   Só use estes tokens na UI: nada de hex avulso, slate-* ou valores arbitrários. */
+
+@theme {
+  /* Paleta base */
+  --color-verde-destaque: #81fe88;
+  --color-verde-pastel: #bfffc3;
+  --color-verde-petroleo: #132e35;
+  --color-grafite: #00090e;
+  --color-cinza-escuro: #171d1f;
+  --color-cinza: #3e3e3f;
+  --color-cinza-medio: #888888;
+  --color-cinza-claro: #bcbcbc;
+  --color-offwhite: #e1e1e1;
+  --color-branco: #ffffff;
+
+  /* Semânticas (use estas nos componentes) */
+  --color-bg-page: #00090e;
+  --color-bg-surface: #171d1f;
+  --color-bg-card-media: #848484;
+  --color-text-primary: #e1e1e1;
+  --color-text-emphasis: #bcbcbc;
+  --color-text-secondary: #888888;
+  --color-accent: #81fe88;
+  --color-accent-hover: #bfffc3;
+  --color-on-accent: #132e35;
+  --color-field-bg: #888888;
+  --color-on-field: #171d1f;
+  --color-border-inactive: #888888;
+  --color-focus-ring: #81fe88;
+  --color-divider: #3e3e3f;
+
+  /* Tipografia */
+  --font-sans: "Prompt", system-ui, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, monospace;
+
+  --text-heading: 44px;
+  --text-heading--line-height: 1.2;
+  --text-heading-small: 37px;
+  --text-heading-small--line-height: 1.2;
+  --text-subtitle-large: 31px;
+  --text-subtitle-large--line-height: 1.5;
+  --text-subtitle: 26px;
+  --text-subtitle--line-height: 1.5;
+  --text-paragraph-large: 22px;
+  --text-paragraph-large--line-height: 1.5;
+  --text-paragraph: 18px;
+  --text-paragraph--line-height: 1.5;
+  --text-paragraph-small: 15px;
+  --text-paragraph-small--line-height: 1.5;
+  --text-label: 12.5px;
+  --text-label--line-height: 1.5;
+  --text-code: 15px;
+  --text-code--line-height: 1.6;
+
+  /* Raios */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  /* Sombras */
+  --shadow-editor: 0 16px 24px 0 rgba(0, 0, 0, 0.24);
+  /* Bordas internas de 1px: mantêm a mesma altura do elemento sem borda (botões, search box) */
+  --shadow-outline: inset 0 0 0 1px var(--color-cinza-medio);
+  --shadow-outline-accent: inset 0 0 0 1px var(--color-verde-destaque);
+  --shadow-outline-hover: inset 0 0 0 1px var(--color-verde-pastel);
+  /* Espaço reservado de mídia (protótipo do Publicar) */
+  --shadow-outline-dark: inset 0 0 0 1px var(--color-cinza-escuro);
+  /* Estado de erro de campo (DESIGN.md, Pendência 8) */
+  --shadow-field-error: inset 0 0 0 2px var(--color-branco);
+
+  /* Tamanhos */
+  --spacing-icon-md: 24px;
+  --spacing-icon-lg: 32px;
+  --spacing-avatar-sm: 32px;
+  --spacing-avatar-profile-sm: 160px;
+  --spacing-avatar-profile-md: 208px;
+  --spacing-avatar-profile-lg: 254px;
+  --spacing-textarea: 161px; /* altura do textarea (DESIGN.md, Input) */
+
+  /* Larguras máximas do card de publicação (DESIGN.md, Card de publicação) */
+  --container-card-feed: 486px;
+  --container-card-page: 993px;
+}
+
+/* Padding lateral das telas: 16px a 80px conforme a largura (HANDOFF, AppLayout) */
+@utility px-page {
+  padding-inline: clamp(16px, 5vw, 80px);
+}
+
+/* Grade de cards: colunas de no mínimo 400px, gap 24px (HANDOFF, Feed; FR-009) */
+@utility grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
+  gap: 24px;
+}

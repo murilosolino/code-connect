@@ -3,7 +3,7 @@ DC := docker compose
 
 .PHONY: help up down start stop restart build rebuild logs logs-backend logs-frontend logs-mysql ps \
         db-cli db-root db-dump db-restore db-reset sh-backend sh-frontend \
-        backend-tidy backend-test frontend-install frontend-lint clean prod-build hooks-install
+        backend-tidy backend-test frontend-install frontend-lint frontend-test clean prod-build hooks-install
 
 help: ## Lista os comandos disponíveis
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -81,6 +81,9 @@ frontend-install: ## Instala dependência: make frontend-install pkg=nome
 
 frontend-lint: ## Checagem de tipos do frontend
 	$(DC) exec frontend npm run lint
+
+frontend-test: ## Roda os testes do frontend (Vitest)
+	$(DC) exec frontend npm test
 
 prod-build: ## Builda as imagens de produção (target prod)
 	docker build --target prod -t code-connect-backend:prod ./backend
