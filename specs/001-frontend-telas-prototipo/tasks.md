@@ -316,8 +316,8 @@ roteiro 5).
 - [X] T127 Auditoria de acessibilidade em todas as telas (`frontend/src/pages/*.tsx`): navegação só por teclado (ordem lógica, foco visível em todos os controles), um `<h1>` por página, nomes acessíveis de botões só com ícone, contraste dos pares usados ≥ 4.5:1 (SC-005), leitor de tela não lê nomes de ícones
 - [X] T128 Revisão responsiva final de todas as telas (`frontend/src/pages/*.tsx` × `codeconnect-design/telas/*.dc.html`) em 360, 768, 1024 e 1440px contra os protótipos (SC-001, SC-004), sem rolagem horizontal; corrigir os componentes (não as páginas) quando o problema for de um primitivo
 - [X] T128a Acrescentada na implementação (achado ao testar textos longos sem espaços a 360px): tags, `@handle` e texto de comentário estouravam o card porque `break-words` não reduz o tamanho mínimo de itens flex; corrigido com `wrap-anywhere` em `frontend/src/components/ui/Tag.tsx`, `TagList.tsx`, `frontend/src/features/users/UserBadge.tsx` e `frontend/src/features/comments/CommentLine.tsx`. Ao medir overflow em emulação de viewport, comparar com a largura configurada, não com `innerWidth` (ele cresce junto com o overflow)
-- [ ] T129 Rodar os gates definidos no `Makefile`: `make frontend-lint`, `make frontend-test`, `make backend-test` e `make prod-build`, todos verdes
-- [ ] T130 Executar o roteiro completo de [quickstart.md](./quickstart.md), inclusive a aba Rede sem requisições a `/api/` (SC-006) e o recarregamento restaurando os dados de exemplo (FR-004)
+- [X] T129 Rodar os gates definidos no `Makefile`: `make frontend-lint`, `make frontend-test`, `make backend-test` e `make prod-build`, todos verdes
+- [X] T130 Executar o roteiro completo de [quickstart.md](./quickstart.md), inclusive a aba Rede sem requisições a `/api/` (SC-006) e o recarregamento restaurando os dados de exemplo (FR-004)
 - [ ] T131 Abrir o PR para `master` com a checagem (seguindo `.specify/memory/constitution.md`) de conformidade com a constituição (os 5 princípios + gates) e as diferenças intencionais em relação aos protótipos na descrição
 
 ---

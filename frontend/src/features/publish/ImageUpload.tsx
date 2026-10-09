@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState, type ChangeEvent } from 'react'
 import { Button, FieldError, MediaPanel, MediaPlaceholder } from '../../components/ui'
 import { useObjectUrl } from '../../hooks/useObjectUrl'
-import { validateImageFile } from '../../lib/files'
+import { ACCEPTED_IMAGE_TYPES, validateImageFile } from '../../lib/files'
 
 type Props = {
   /** Recebe a URL da prévia quando uma imagem válida é escolhida. */
@@ -54,7 +54,7 @@ export function ImageUpload({ onChange }: Props) {
       <input
         ref={inputRef}
         type="file"
-        accept="image/png,image/jpeg"
+        accept={ACCEPTED_IMAGE_TYPES.join(',')}
         onChange={handleFile}
         tabIndex={-1}
         aria-hidden="true"
