@@ -43,7 +43,7 @@ export function LoginPage() {
             <TextField label="Senha" type="password" placeholder="******" {...form.register('password')} />
             <div className="flex items-center justify-between gap-4">
               <Checkbox label="Lembrar-me" checked={remember} onChange={setRemember} />
-              {/* Ainda não há fluxo de recuperação (FR-017): o link fica na própria tela. */}
+              {/* Ainda não há fluxo de recuperação: o link fica na própria tela. */}
               <TextLink variant="form" to="/login">
                 Esqueci a senha
               </TextLink>

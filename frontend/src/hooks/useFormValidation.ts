@@ -4,7 +4,7 @@ import { validate, type FormErrors, type Schema } from '../lib/validation'
 type FieldElement = HTMLInputElement | HTMLTextAreaElement
 
 /**
- * Estado, validação e foco de um formulário (FR-025):
+ * Estado, validação e foco de um formulário:
  * valida no envio (não a cada tecla), foca o primeiro campo inválido e limpa o erro
  * de um campo assim que ele é corrigido. Os valores chegam a `onValid` como digitados;
  * campos só com espaços contam como vazios porque as regras (`required`) fazem `trim`.

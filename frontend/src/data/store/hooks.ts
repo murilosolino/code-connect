@@ -1,5 +1,5 @@
 /**
- * A única porta entre as telas e os dados (specs/001-frontend-telas-prototipo/contracts/data-store.md).
+ * A única porta entre as telas e os dados.
  * Na integração com a API, só a implementação destes hooks muda.
  */
 import { useContext, useMemo } from 'react'

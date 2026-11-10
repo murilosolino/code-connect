@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { renderWithProviders } from '../test/renderWithProviders'
 import { routes } from './router'
 
-/** Endereços existentes: cada user story acrescenta o seu (SC-006: nenhuma chamada à API). */
+/** Endereços existentes (nenhuma chamada à API). */
 const KNOWN_PATHS = ['/', '/projeto/vendas', '/publicar', '/perfil/julio', '/sobre', '/login', '/cadastro', '/qualquer-coisa']
 
 describe('rotas do app', () => {

@@ -94,7 +94,7 @@ describe('hooks do store', () => {
         <AppDataProvider initialState={undefined}>{children}</AppDataProvider>
       ),
     })
-    // Outro provider recria o estado a partir do seed (FR-004): o projeto publicado some.
+    // Outro provider recria o estado a partir do seed: o projeto publicado some.
     expect(lookup.current).toBeUndefined()
   })
 

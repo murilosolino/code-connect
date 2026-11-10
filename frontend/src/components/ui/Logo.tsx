@@ -7,7 +7,7 @@ type Props = {
 
 const classes = 'text-subtitle font-semibold text-text-primary'
 
-/** Texto "CodeConnect" até chegar o logo oficial do Figma (FR-024). */
+/** Texto "CodeConnect" até chegar o logo oficial do Figma. */
 export function Logo({ linked = true }: Props) {
   return linked ? (
     <Link to="/" className={`${classes} no-underline`}>

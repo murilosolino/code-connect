@@ -61,7 +61,7 @@ futuras; corrigi-las depois custa mais do que construir certo.
 ### IV. Test-First (INEGOCIÁVEL)
 
 - TDD é obrigatório: o teste DEVE ser escrito e visto falhando antes da implementação
-  (Red → Green → Refactor). Em `tasks.md`, tarefas de teste DEVEM preceder as de implementação.
+  (Red → Green → Refactor).
 - Backend DEVE ter as duas camadas de teste:
   - **Unidade**: handlers e regras de negócio isolados (`httptest`, dependências
     substituíveis por interfaces/fakes), sem rede nem banco.
@@ -85,8 +85,8 @@ detecta concorrência incorreta que só apareceria em produção.
 - Toda rota DEVE ficar sob o grupo `/api`, trocar JSON e usar códigos HTTP corretos (`4xx` para
   erro do cliente, `5xx` para falha do servidor) com corpo de erro consistente.
 - O frontend DEVE chamar apenas URLs relativas `/api/...` (proxy do Vite / nginx).
-- YAGNI: começar pelo mais simples que atende à spec. Nova dependência, camada ou abstração
-  DEVE ser justificada na seção Complexity Tracking do `plan.md`.
+- YAGNI: começar pelo mais simples que atende aos requisitos. Nova dependência, camada ou
+  abstração DEVE ser justificada na descrição do PR.
 
 **Racional**: poucas camadas e dependências explícitas mantêm o código testável (Princípio IV)
 e fácil de entender por qualquer pessoa do time.
@@ -112,9 +112,6 @@ e fácil de entender por qualquer pessoa do time.
   `<tipo>/<descricao-em-kebab-case>` (ex.: `feat/feed-filtros`, `fix/login-foco`).
 - Commits DEVEM seguir Conventional Commits (`feat:`, `fix(backend):`, `docs:`, `chore:`…).
 - Os hooks DEVEM estar instalados (`make hooks-install`); `--no-verify` NÃO DEVE ser usado.
-- Features DEVERIAM seguir o fluxo Spec Kit: `/speckit-specify` → `/speckit-clarify` (se houver
-  ambiguidade) → `/speckit-plan` (com Constitution Check) → `/speckit-tasks` →
-  `/speckit-implement`.
 - Gates obrigatórios antes do merge de um PR:
   1. `make backend-test` passando (unidade + integração, com `--race`);
   2. `make frontend-lint` passando e testes de componente do frontend passando;
@@ -126,16 +123,13 @@ e fácil de entender por qualquer pessoa do time.
 - Esta constituição prevalece sobre qualquer outra prática do projeto. `CLAUDE.md` (guia
   operacional para agentes), `DESIGN.md` e `README.md` são guias de execução e NÃO DEVEM
   contradizê-la; havendo conflito, o guia DEVE ser corrigido.
-- **Emendas**: feitas por PR dedicado que altera `.specify/memory/constitution.md` via
-  `/speckit-constitution`, com Sync Impact Report, justificativa e plano de migração quando
-  houver código em desacordo. O Sync Impact Report é material de revisão e DEVE ser removido
-  antes do commit final da emenda.
+- **Emendas**: feitas por PR dedicado que altera `docs/constitution.md`, com justificativa e
+  plano de migração quando houver código em desacordo.
 - **Versionamento** (SemVer):
   - MAJOR: remoção ou redefinição incompatível de princípio ou regra de governança;
   - MINOR: princípio ou seção nova, ou orientação materialmente ampliada;
   - PATCH: esclarecimentos, redação e correções sem mudança de significado.
-- **Conformidade**: todo PR e todo `plan.md` (Constitution Check) DEVEM verificar aderência.
-  Violação só é aceita se justificada na seção Complexity Tracking do plano, com a
-  alternativa mais simples rejeitada explicada.
+- **Conformidade**: todo PR DEVE verificar aderência. Violação só é aceita se justificada na
+  descrição do PR, com a alternativa mais simples rejeitada explicada.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-07 | **Last Amended**: 2026-10-07
+**Version**: 2.0.0 | **Ratified**: 2026-10-07 | **Last Amended**: 2026-11-10

@@ -11,7 +11,7 @@ type Props = {
 }
 
 /**
- * Estado compartilhado entre as telas, em memória (FR-004). Recarregar a página recria
+ * Estado compartilhado entre as telas, em memória. Recarregar a página recria
  * o estado a partir do seed.
  */
 export function AppDataProvider({ children, initialState }: Props) {

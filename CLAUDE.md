@@ -6,11 +6,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The project constitution is the source of all engineering rules (principles, testing discipline, Git workflow, quality gates). It is imported below and takes precedence over this file; if this file contradicts it, fix this file.
 
-@.specify/memory/constitution.md
+@docs/constitution.md
 
 - `DESIGN.md` is the design source of truth — read it before any UI work. `codeconnect-design/` (prototypes and handoff) is a local-only visual reference, git-ignored.
 - The constitution, `DESIGN.md`, the README and all UI copy are in Brazilian Portuguese; this file stays in English.
-- Features follow the Spec Kit flow (`/speckit-specify` → `/speckit-plan` → `/speckit-tasks` → `/speckit-implement`); amend the constitution only via `/speckit-constitution`.
+- Amend the constitution only through a dedicated PR.
 
 ## Overview
 
@@ -33,7 +33,6 @@ The Makefile wraps `docker compose` (`make help` lists everything). On a Windows
 ## Conventions
 
 - The main branch is `master`.
-- On Windows, the Spec Kit Python scripts need `PYTHONIOENCODING=utf-8` (e.g. `PYTHONIOENCODING=utf-8 python .specify/scripts/python/setup_tasks.py --json`), otherwise they fail with a `UnicodeEncodeError` on non-ASCII output.
 - If you find that an assumption in this file (or one you made during the session) was wrong, suggest a correction to `CLAUDE.md`.
 
 ## Architecture
@@ -43,7 +42,7 @@ The Makefile wraps `docker compose` (`make help` lists everything). On a Windows
 **Frontend** (`frontend/`): the Vite dev server proxies `/api` to `VITE_API_PROXY_TARGET` (set to `http://backend:<port>` by compose); in prod, nginx serves the build and proxies `/api/` to `backend:8080` (`frontend/nginx.conf`). File watching uses polling because of the bind mount. `node_modules` lives in a named volume.
 
 Frontend source (`frontend/src`), layers depend only downward (`pages → features → components/layout → components/ui → lib`):
-- `app/` — `App.tsx` (data provider + router) and `router.tsx` (`routes`, see `specs/001-frontend-telas-prototipo/contracts/routes.md`)
+- `app/` — `App.tsx` (data provider + router) and `router.tsx` (`routes`)
 - `styles/` — `theme.css` holds every design token (`@theme`); `index.css` has the base rules. UI uses only these tokens (no hex, no `slate-*`, no `w-[…]`); `DESIGN.md` §7 lists them
 - `data/` — the in-memory data layer: `seed.ts` (sample data from the prototypes), `store/` (pure `reducer` + `selectors`, `AppDataProvider`, and the hooks `usePosts`, `usePost`, `useComments`, `useUser`, `useUserPosts`, `useViewer`, `useAppActions`). Screens read data **only through these hooks**, so swapping in the API later does not touch them; nothing calls `fetch` yet
 - `components/ui/` — design-system primitives (`Button`, `TextField`, `Tag`, `Tabs`, `EmptyState`…); `Action` is the internal link-or-button base. `components/layout/` — `AppLayout` (sidebar from 1024px, bar below; one `<nav>` rendered per breakpoint via `useMediaQuery`), `AuthScreen`

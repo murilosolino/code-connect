@@ -98,7 +98,7 @@
   padding-inline: clamp(16px, 5vw, 80px);
 }
 
-/* Grade de cards: colunas de no mínimo 400px, gap 24px (HANDOFF, Feed; FR-009) */
+/* Grade de cards: colunas de no mínimo 400px, gap 24px (HANDOFF, Feed) */
 @utility grid-cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));

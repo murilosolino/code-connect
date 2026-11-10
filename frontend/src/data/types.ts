@@ -1,5 +1,5 @@
 /**
- * Tipos de domínio do frontend (ver specs/001-frontend-telas-prototipo/data-model.md).
+ * Tipos de domínio do frontend.
  * Nesta etapa vivem só em memória; a forma é a mesma que a API vai devolver depois.
  */
 

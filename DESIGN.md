@@ -219,18 +219,16 @@ Inconsistências/lacunas do Figma para confirmar com design:
 5. **Fundo da página** e **fundo dos comentários** não estão definidos nos nós analisados. Adotado o que os protótipos usam: página em `grafite #00090E` (`bg-page`) e bloco de comentários em `offwhite #E1E1E1` com texto `cinza-escuro`.
 6. **Menu**: as variantes de página ativa "Feed/Perfil/Sobre/Deslogado" do menu lateral (nós 155:3923, 155:3940, 155:3957, 585:2641) ainda não foram lidas. Adotado o que o HANDOFF descreve: item da página atual em `verde-destaque` com `aria-current="page"`; o detalhe de um projeto marca "Feed". A variante deslogada do menu não foi implementada (só há a logada).
 7. **Checkbox marcado** (`Check`) e **Paragraph Código** (line-height `100`) não foram detalhados.
-   Definição provisória do checkbox marcado (spec `001-frontend-telas-prototipo`, FR-027): caixa
+   Definição provisória do checkbox marcado: caixa
    `24×24`, raio `4px`, borda `2px` `#81FE88` e ícone `check` centralizado em `#81FE88`.
-8. **Estado de erro dos campos** não existe no Figma. Definição provisória (spec
-   `001-frontend-telas-prototipo`, FR-026), só com tokens existentes: campo com borda interna
+8. **Estado de erro dos campos** não existe no Figma. Definição provisória, só com tokens existentes: campo com borda interna
    `2px` `#FFFFFF` (contraste 3.5:1 sobre `#888888`), mantendo fundo e altura; `8px` abaixo,
    ícone `error` 15px + mensagem Paragraph Small 15px `#E1E1E1`, `gap 8px`. Não há cor de erro
    (vermelho) no design system; confirmar com design.
-9. **Estados vazios e "não encontrado"** não existem no Figma. Definição provisória (spec
-   `001-frontend-telas-prototipo`, FR-029): superfície `#171D1F`, raio `8px`, padding `24px`,
+9. **Estados vazios e "não encontrado"** não existem no Figma. Definição provisória: superfície `#171D1F`, raio `8px`, padding `24px`,
    ícone Material 32px `#888888`, título Paragraph Large Semibold `#BCBCBC`, texto Paragraph
    Small `#888888` e, quando houver, botão secundário "Voltar ao feed".
-10. **Link "Pular para o conteúdo"** não existe no Figma. Definição provisória (FR-030): oculto
+10. **Link "Pular para o conteúdo"** não existe no Figma. Definição provisória: oculto
     até receber foco; focado, aparece no canto superior esquerdo com o visual do botão primário.
 11. **Ponto de quebra do menu**: o HANDOFF dos protótipos usa menu lateral a partir de 768px, mas
     este documento (§5) define o tablet com referência de 768px e menu horizontal. Prevalece este

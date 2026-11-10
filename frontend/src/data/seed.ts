@@ -1,7 +1,7 @@
 /**
  * Dados de exemplo extraídos dos protótipos (`Feed`, `Post` e `Perfil`).
  * É a única fonte de dados desta etapa: as telas leem pelos hooks de `store/`,
- * nunca daqui diretamente (FR-003).
+ * nunca daqui diretamente.
  */
 import type { AppState, Comment, Post, Reply, User } from './types'
 import { VIEWER_HANDLE } from './viewer'
@@ -223,7 +223,7 @@ const commentsByPost: Record<string, Entry[]> = {
   portfolio: [{ by: 'marcos', text: 'Astro é uma ótima escolha para sites estáticos.' }],
 }
 
-/** Cria um estado novo a cada chamada: recarregar a página restaura os dados de exemplo (FR-004). */
+/** Cria um estado novo a cada chamada: recarregar a página restaura os dados de exemplo. */
 export function createSeedState(): AppState {
   return {
     users: Object.fromEntries(users.map((user) => [user.handle, { ...user }])),

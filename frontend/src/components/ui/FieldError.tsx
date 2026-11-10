@@ -6,7 +6,7 @@ type Props = {
 }
 
 /**
- * Mensagem de erro de campo (FR-026). A região `aria-live` fica sempre no DOM, para que
+ * Mensagem de erro de campo. A região `aria-live` fica sempre no DOM, para que
  * o leitor de tela anuncie a mensagem quando ela aparecer.
  */
 export function FieldError({ id, message }: Props) {

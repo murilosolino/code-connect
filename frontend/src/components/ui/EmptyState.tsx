@@ -12,7 +12,7 @@ type Props = {
   headingLevel?: 1 | 2 | 3
 }
 
-/** Estado vazio e "não encontrado" (FR-029; definição provisória registrada no DESIGN.md). */
+/** Estado vazio e "não encontrado" (definição provisória registrada no DESIGN.md). */
 export function EmptyState({ icon, title, description, action, headingLevel = 2 }: Props) {
   const Heading = `h${headingLevel}` as const
 
