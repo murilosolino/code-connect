@@ -217,7 +217,7 @@ Inconsistências/lacunas do Figma para confirmar com design:
 3. **Tags em cards**: no Figma o fundo e o texto aparecem ambos `#171D1F` (provável override de instância); o padrão adotado é o da tag (`#888888` / `#171D1F`).
 4. **Topo do card** usa `#848484` na versão página e `#888888` no feed — diferença provavelmente acidental.
 5. **Fundo da página** e **fundo dos comentários** não estão definidos nos nós analisados. Adotado o que os protótipos usam: página em `grafite #00090E` (`bg-page`) e bloco de comentários em `offwhite #E1E1E1` com texto `cinza-escuro`.
-6. **Menu**: as variantes de página ativa "Feed/Perfil/Sobre/Deslogado" do menu lateral (nós 155:3923, 155:3940, 155:3957, 585:2641) ainda não foram lidas. Adotado o que o HANDOFF descreve: item da página atual em `verde-destaque` com `aria-current="page"`; o detalhe de um projeto marca "Feed". A variante deslogada do menu não foi implementada (só há a logada).
+6. **Menu**: as variantes de página ativa "Feed/Perfil/Sobre/Deslogado" do menu lateral (nós 155:3923, 155:3940, 155:3957, 585:2641) ainda não foram lidas. Adotado o que o HANDOFF descreve: item da página atual em `verde-destaque` com `aria-current="page"`; o detalhe de um projeto marca "Feed". A variante deslogada segue o que o §4 descreve (Feed, Sobre nós e **Login**, ícone `login`), com o mesmo visual dos demais itens; "Sair" é um botão, não um link.
 7. **Checkbox marcado** (`Check`) e **Paragraph Código** (line-height `100`) não foram detalhados.
    Definição provisória do checkbox marcado: caixa
    `24×24`, raio `4px`, borda `2px` `#81FE88` e ícone `check` centralizado em `#81FE88`.
@@ -242,3 +242,12 @@ Inconsistências/lacunas do Figma para confirmar com design:
 17. **Código dos banners no mobile**: o protótipo usa fonte mono de 13px nos banners de Login, Cadastro e Sobre; não há token para esse tamanho, então usa-se `text-code` (15px).
 18. **"Esqueci a senha"** é exibido como link, mas não há fluxo de recuperação nos protótipos; o link permanece na própria tela de Login.
 19. **Avatar pequeno** mostra só a primeira letra das iniciais (como nos protótipos); o avatar do perfil mostra as duas ("JO") em `cinza-claro` sobre `cinza`.
+20. **Login social oculto**: os botões "GitHub" e "Google" (e o divisor "ou entre com outras contas") dos protótipos de Login e Cadastro foram removidos enquanto o login social não existe; mantê-los levando ao feed sem autenticar enganaria quem usa. Voltam quando o OAuth for implementado. O design também não define o estado desabilitado.
+21. **Textos de autenticação** que não existem nos protótipos (definição provisória, a confirmar com design):
+    - "Email, usuário ou senha incorretos." (login inválido, sob o campo Senha);
+    - "Este email já está em uso." (cadastro, sob o campo Email);
+    - "Use ao menos 8 caracteres." (senha do cadastro, também validada no servidor);
+    - "Não foi possível concluir agora. Tente novamente." (falha de rede ou do servidor, acima do botão, no mesmo padrão do erro de campo);
+    - "Faça login para comentar." (link de `accent` no lugar do campo de comentário, para quem não está logado).
+22. **Quem não está logado** vê Feed, projeto, perfil e Sobre nós, mas sem o botão de aprovar (só o contador), sem "Seguir" e sem o campo de comentário. "Seguir" também some no próprio perfil. Publicar leva ao Login e, depois de entrar, volta para Publicar. O design não define esses estados.
+23. **Botão enviando**: durante o envio de Login e Cadastro o botão fica desabilitado (`disabled`) sem mudar de aparência, porque o design não define o estado desabilitado.

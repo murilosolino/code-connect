@@ -22,7 +22,9 @@ The Makefile wraps `docker compose` (`make help` lists everything). On a Windows
 
 - `make up` — copies `.env.example` → `.env` if missing, builds and starts all services (frontend :5173, API :8080, MySQL host port :3307)
 - `make logs` / `logs-backend` / `logs-frontend` / `logs-mysql`
-- `make backend-test` — `go test --race ./...` inside the backend container (single test: `docker compose exec -e CGO_ENABLED=1 backend go test --race ./internal/handlers -run TestName`). `--race` needs CGO; gcc/musl-dev are installed in the `dev` image stage, so rebuild with `make build` after pulling Dockerfile changes
+- `make backend-test` — `go test --race ./...` inside the backend container (single test: `docker compose exec -e CGO_ENABLED=1 backend go test --race ./internal/handlers -run TestName`). Includes unit tests, integration tests (`internal/integration`, real MySQL through `TEST_DB_DSN`, set by compose) and the fuzz seed corpus. `--race` needs CGO; gcc/musl-dev are installed in the `dev` image stage, so rebuild with `make build` after pulling Dockerfile changes
+- `make backend-fuzz` — runs every fuzz target for `FUZZTIME` (default `30s`) with `--race`; `make backend-bench` — benchmarks with `-benchmem`
+- `make swagger` — regenerates `backend/docs/` from the handler annotations; run it after changing a route. The UI is at `/api/docs/index.html` when `SWAGGER_ENABLED=true`
 - `make frontend-lint` — type check only (`tsc -b --noEmit`, includes the test files); there is no ESLint
 - `make frontend-test` — frontend tests (`vitest run`: Vitest + jsdom + Testing Library, tests live next to the file they test). A single file: `docker compose exec frontend npx vitest run src/pages/FeedPage`
 - `make frontend-install pkg=<name>` / `make backend-tidy` — add deps inside the containers
@@ -33,18 +35,20 @@ The Makefile wraps `docker compose` (`make help` lists everything). On a Windows
 ## Conventions
 
 - The main branch is `master`.
+- All backend tests must pass with the race flag (`go test --race ./...`, i.e. `make backend-test`).
+- Always run `go fmt ./...` and `go vet ./...` on the backend when finishing a task.
 - If you find that an assumption in this file (or one you made during the session) was wrong, suggest a correction to `CLAUDE.md`.
 
 ## Architecture
 
-**Backend** (`backend/`, module `github.com/code-connect/backend`): `cmd/api/main.go` wires `config.Load()` → `database.Connect(cfg.DSN())` → `router.New(cfg, db)`. Handlers are structs holding their dependencies (e.g. `handlers.Health{DB: db}`) with methods registered in `internal/router/router.go` under the `/api` group. Config defaults live in `internal/config`. Dev hot reload uses Air (`.air.toml`, polling mode, builds to `tmp/`). Source is bind-mounted into the container at `/app`.
+**Backend** (`backend/`, module `github.com/code-connect/backend`): `cmd/api/main.go` wires `config.Load()` → `database.Connect(cfg.DSN())` → `router.New(cfg, db)`. Handlers are structs holding their dependencies (e.g. `handlers.Health{DB: db}`) with methods registered in `internal/router/router.go` under the `/api` group. Config defaults live in `internal/config`; `JWT_SECRET` has no default and the API refuses to start without one of at least 32 bytes. Auth is a JWT in an `httpOnly` cookie (`internal/auth`, `internal/middleware`); logout writes the token's `jti` to `revoked_tokens`. Migrations are embedded SQL in `internal/database/migrations` (one statement per file), applied by `database.Migrate` at startup. Dev hot reload uses Air (`.air.toml`, polling mode, builds to `tmp/`). Source is bind-mounted into the container at `/app`.
 
 **Frontend** (`frontend/`): the Vite dev server proxies `/api` to `VITE_API_PROXY_TARGET` (set to `http://backend:<port>` by compose); in prod, nginx serves the build and proxies `/api/` to `backend:8080` (`frontend/nginx.conf`). File watching uses polling because of the bind mount. `node_modules` lives in a named volume.
 
 Frontend source (`frontend/src`), layers depend only downward (`pages → features → components/layout → components/ui → lib`):
 - `app/` — `App.tsx` (data provider + router) and `router.tsx` (`routes`)
 - `styles/` — `theme.css` holds every design token (`@theme`); `index.css` has the base rules. UI uses only these tokens (no hex, no `slate-*`, no `w-[…]`); `DESIGN.md` §7 lists them
-- `data/` — the in-memory data layer: `seed.ts` (sample data from the prototypes), `store/` (pure `reducer` + `selectors`, `AppDataProvider`, and the hooks `usePosts`, `usePost`, `useComments`, `useUser`, `useUserPosts`, `useViewer`, `useAppActions`). Screens read data **only through these hooks**, so swapping in the API later does not touch them; nothing calls `fetch` yet
+- `data/` — the in-memory data layer: `seed.ts` (sample data from the prototypes), `store/` (pure `reducer` + `selectors`, `AppDataProvider`, and the hooks `usePosts`, `usePost`, `useComments`, `useUser`, `useUserPosts`, `useViewer`, `useAppActions`). Screens read data **only through these hooks**, which concentrates the swap to the API there, but screens will still need to handle loading, errors and async actions. Only authentication calls the API so far (`lib/api.ts`, `data/auth/`)
 - `components/ui/` — design-system primitives (`Button`, `TextField`, `Tag`, `Tabs`, `EmptyState`…); `Action` is the internal link-or-button base. `components/layout/` — `AppLayout` (sidebar from 1024px, bar below; one `<nav>` rendered per breakpoint via `useMediaQuery`), `AuthScreen`
 - `features/` — domain components (`posts`, `comments`, `users`, `feed`, `publish`); `pages/` — one thin page per route
 - `lib/`, `hooks/` — pure helpers (validation, text, files) and shared hooks (`useFormValidation`, `useObjectUrl`…); `test/` — `renderWithProviders`, `matchMedia` stub
