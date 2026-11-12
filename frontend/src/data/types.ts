@@ -58,6 +58,14 @@ export type Viewer = {
   followingHandles: string[]
 }
 
+/** Pessoa autenticada, como a API devolve em `/auth/me`. */
+export type AuthViewer = {
+  handle: string
+  name: string
+  initials: string
+  avatarUrl: string | null
+}
+
 export type AppState = {
   users: Record<string, User>
   /** Ordem = "Recentes" (mais novo primeiro). */

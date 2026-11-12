@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { cx } from '../../lib/cx'
 import { Surface, TagList } from '../../components/ui'
+import { useAuth } from '../../data/auth/useAuth'
 import { useAppActions } from '../../data/store/hooks'
 import type { PostView } from '../../data/types'
 import { UserBadge } from '../users/UserBadge'
@@ -18,6 +19,7 @@ type Props = {
 /** Card de publicação: mídia no topo; título, descrição, tags, ações e autor embaixo. */
 export function PostCard({ post, size, headingLevel = 2 }: Props) {
   const { toggleApproval } = useAppActions()
+  const { viewer } = useAuth()
   const isFeed = size === 'feed'
   const detailPath = `/projeto/${post.id}`
   const Heading = `h${headingLevel}` as const
@@ -50,7 +52,7 @@ export function PostCard({ post, size, headingLevel = 2 }: Props) {
             shares={post.shares}
             comments={post.commentCount}
             approved={post.approvedByViewer}
-            onApprove={() => toggleApproval(post.id)}
+            onApprove={viewer ? () => toggleApproval(post.id) : undefined}
             commentsTo={isFeed ? detailPath : undefined}
           />
           <UserBadge handle={post.author.handle} initials={post.author.initials} />

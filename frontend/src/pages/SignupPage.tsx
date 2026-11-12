@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
 import { AuthScreen } from '../components/layout/AuthScreen'
-import { SocialLoginButtons } from '../components/layout/SocialLoginButtons'
-import { Button, Checkbox, TextField, TextLink } from '../components/ui'
+import { Button, Checkbox, FieldError, TextField, TextLink } from '../components/ui'
+import { useAuth } from '../data/auth/useAuth'
 import { useFormValidation } from '../hooks/useFormValidation'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { fieldErrorsFrom, GENERAL_ERROR_MESSAGE } from '../lib/api'
 import { signupSchema } from '../lib/validation'
 
 const BANNER = {
@@ -13,14 +13,26 @@ const BANNER = {
   phrase: 'Crie sua conta e mostre o código por trás dos seus projetos.',
 }
 
-/** Cadastro visual: valida os campos e segue para o feed; não cria conta nesta etapa. */
+const FORM_ERROR_ID = 'cadastro-erro'
+
+/** Cadastro: cria a conta e já abre a sessão; a rota leva a pessoa ao feed. */
 export function SignupPage() {
   usePageTitle('Cadastro')
-  const navigate = useNavigate()
+  const { signup } = useAuth()
   const form = useFormValidation(signupSchema)
   const [remember, setRemember] = useState(false)
+  const [formError, setFormError] = useState<string>()
 
-  const handleSubmit = form.handleSubmit(() => navigate('/'))
+  const handleSubmit = form.handleSubmit(async ({ name, email, password }) => {
+    setFormError(undefined)
+    try {
+      await signup({ name: name.trim(), email: email.trim(), password, remember })
+    } catch (error) {
+      const fields = fieldErrorsFrom(error, ['name', 'email', 'password'] as const)
+      if (fields) form.setFieldErrors(fields)
+      else setFormError(GENERAL_ERROR_MESSAGE)
+    }
+  })
 
   return (
     <AuthScreen
@@ -45,11 +57,20 @@ export function SignupPage() {
             <Checkbox label="Lembrar-me" checked={remember} onChange={setRemember} />
           </div>
         </div>
-        <Button variant="primary" type="submit" icon="arrow_forward">
-          Cadastrar
-        </Button>
+        <div>
+          <FieldError id={FORM_ERROR_ID} message={formError} />
+          <Button
+            variant="primary"
+            type="submit"
+            icon="arrow_forward"
+            fullWidth
+            disabled={form.submitting}
+            aria-describedby={formError ? FORM_ERROR_ID : undefined}
+          >
+            Cadastrar
+          </Button>
+        </div>
       </form>
-      <SocialLoginButtons to="/" />
     </AuthScreen>
   )
 }

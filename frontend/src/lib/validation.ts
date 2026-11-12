@@ -18,6 +18,12 @@ export const email =
   (value) =>
     EMAIL_PATTERN.test(value.trim()) ? null : message
 
+/** Exige ao menos `min` caracteres (conta letras, não bytes). */
+export const minLength =
+  (min: number, message: string): Rule =>
+  (value) =>
+    [...value].length >= min ? null : message
+
 /** Aplica o schema e devolve só os campos com erro (a primeira regra que falhar de cada um). */
 export function validate<K extends string>(
   schema: Schema<K>,
@@ -52,5 +58,5 @@ export const loginSchema = {
 export const signupSchema = {
   name: [required('Informe seu nome.')],
   email: [required('Informe seu email.'), email('Digite um email válido.')],
-  password: [required('Informe sua senha.')],
+  password: [required('Informe sua senha.'), minLength(8, 'Use ao menos 8 caracteres.')],
 } satisfies Schema<'name' | 'email' | 'password'>

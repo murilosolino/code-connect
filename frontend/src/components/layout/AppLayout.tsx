@@ -1,7 +1,8 @@
 import { Outlet } from 'react-router'
+import { useAuth } from '../../data/auth/useAuth'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { MobileNav } from './MobileNav'
-import { NAV_ITEMS } from './navigation'
+import { getNavItems } from './navigation'
 import { Sidebar } from './Sidebar'
 
 /** Menu lateral a partir de 1024px (`lg`); abaixo disso, barra horizontal (DESIGN.md §5). */
@@ -13,6 +14,8 @@ const DESKTOP_QUERY = '(min-width: 1024px)'
  */
 export function AppLayout() {
   const isDesktop = useMediaQuery(DESKTOP_QUERY)
+  const { viewer } = useAuth()
+  const items = getNavItems(viewer)
 
   return (
     <div className="min-h-screen bg-bg-page px-4 py-6 md:px-page lg:py-10">
@@ -23,7 +26,7 @@ export function AppLayout() {
         Pular para o conteúdo
       </a>
       <div className="mx-auto flex max-w-7xl flex-col gap-6 lg:flex-row lg:gap-10">
-        {isDesktop ? <Sidebar items={NAV_ITEMS} /> : <MobileNav items={NAV_ITEMS} />}
+        {isDesktop ? <Sidebar items={items} /> : <MobileNav items={items} />}
         <main id="conteudo" tabIndex={-1} className="min-w-0 flex-1 outline-none">
           <Outlet />
         </main>

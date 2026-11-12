@@ -1,5 +1,6 @@
 import { useParams } from 'react-router'
 import { NotFoundState, TextLink } from '../components/ui'
+import { useAuth } from '../data/auth/useAuth'
 import { useAppActions, useComments, usePost } from '../data/store/hooks'
 import { CommentForm } from '../features/comments/CommentForm'
 import { CommentThread } from '../features/comments/CommentThread'
@@ -13,6 +14,7 @@ export function ProjectPage() {
   const post = usePost(id)
   const comments = useComments(id)
   const { addComment } = useAppActions()
+  const { viewer } = useAuth()
   usePageTitle(post?.title ?? 'Projeto não encontrado')
 
   if (!post) {
@@ -32,10 +34,16 @@ export function ProjectPage() {
       <PostCard post={post} size="page" headingLevel={1} />
       <section id="comentarios" className="flex flex-col gap-4 pt-4">
         <h2 className="text-subtitle text-text-primary">Comentários</h2>
-        <CommentForm
-          onSubmit={(text) => addComment(post.id, text)}
-          placeholder={`Escreva algo para ${formatHandle(post.author.handle)}`}
-        />
+        {viewer ? (
+          <CommentForm
+            onSubmit={(text) => addComment(post.id, text)}
+            placeholder={`Escreva algo para ${formatHandle(post.author.handle)}`}
+          />
+        ) : (
+          <TextLink variant="accent" to="/login" state={{ from: `/projeto/${post.id}` }} className="self-start">
+            Faça login para comentar.
+          </TextLink>
+        )}
         <CommentThread comments={comments} />
       </section>
     </div>

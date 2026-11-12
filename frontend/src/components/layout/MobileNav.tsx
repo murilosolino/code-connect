@@ -21,7 +21,7 @@ export function MobileNav({ items }: Props) {
         <nav aria-label="Navegação principal">
           <ul className="flex items-center justify-between gap-2">
             {items.map((entry) => (
-              <li key={entry.to}>
+              <li key={entry.label}>
                 <NavItem entry={entry} layout="bar" />
               </li>
             ))}

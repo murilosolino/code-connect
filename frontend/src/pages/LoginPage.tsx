@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
 import { AuthScreen } from '../components/layout/AuthScreen'
-import { SocialLoginButtons } from '../components/layout/SocialLoginButtons'
-import { Button, Checkbox, TextField, TextLink } from '../components/ui'
+import { Button, Checkbox, FieldError, TextField, TextLink } from '../components/ui'
+import { useAuth } from '../data/auth/useAuth'
 import { useFormValidation } from '../hooks/useFormValidation'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { fieldErrorsFrom, GENERAL_ERROR_MESSAGE } from '../lib/api'
 import { loginSchema } from '../lib/validation'
 
 const BANNER = {
@@ -13,14 +13,29 @@ const BANNER = {
   phrase: 'Compartilhe seu código. Receba comentários. Conecte-se.',
 }
 
-/** Login visual: valida os campos e segue para o feed; não há autenticação real nesta etapa. */
+const FORM_ERROR_ID = 'login-erro'
+
+/**
+ * Login com email ou usuário. Ao entrar, a rota (`RedirectIfAuthenticated`) leva a pessoa
+ * à tela que pediu o login ou ao feed.
+ */
 export function LoginPage() {
   usePageTitle('Login')
-  const navigate = useNavigate()
+  const { login } = useAuth()
   const form = useFormValidation(loginSchema)
   const [remember, setRemember] = useState(false)
+  const [formError, setFormError] = useState<string>()
 
-  const handleSubmit = form.handleSubmit(() => navigate('/'))
+  const handleSubmit = form.handleSubmit(async ({ identifier, password }) => {
+    setFormError(undefined)
+    try {
+      await login({ identifier: identifier.trim(), password, remember })
+    } catch (error) {
+      const fields = fieldErrorsFrom(error, ['identifier', 'password'] as const)
+      if (fields) form.setFieldErrors(fields)
+      else setFormError(GENERAL_ERROR_MESSAGE)
+    }
+  })
 
   return (
     <AuthScreen
@@ -50,11 +65,20 @@ export function LoginPage() {
             </div>
           </div>
         </div>
-        <Button variant="primary" type="submit" icon="arrow_forward">
-          Login
-        </Button>
+        <div>
+          <FieldError id={FORM_ERROR_ID} message={formError} />
+          <Button
+            variant="primary"
+            type="submit"
+            icon="arrow_forward"
+            fullWidth
+            disabled={form.submitting}
+            aria-describedby={formError ? FORM_ERROR_ID : undefined}
+          >
+            Login
+          </Button>
+        </div>
       </form>
-      <SocialLoginButtons to="/" />
     </AuthScreen>
   )
 }

@@ -1,15 +1,28 @@
 import { describe, expect, it } from 'vitest'
-import { isActive, NAV_ITEMS } from './navigation'
+import { getNavItems, isActive } from './navigation'
 
-const entry = (label: string) => NAV_ITEMS.find((item) => item.label === label)!
+const signedIn = getNavItems({ handle: 'julio' })
+const entry = (label: string) => signedIn.find((item) => item.label === label)!
 
-describe('NAV_ITEMS', () => {
-  it('tem Feed, Perfil, Sobre nós e Sair, nessa ordem, com destino e ícone', () => {
-    expect(NAV_ITEMS.map(({ label, to, icon }) => ({ label, to, icon }))).toEqual([
+describe('getNavItems', () => {
+  it('logado: Feed, Perfil, Sobre nós e Sair, nessa ordem', () => {
+    expect(signedIn.map(({ label, to, icon, action }) => ({ label, to, icon, action }))).toEqual([
+      { label: 'Feed', to: '/', icon: 'feed', action: undefined },
+      { label: 'Perfil', to: '/perfil/julio', icon: 'account_circle', action: undefined },
+      { label: 'Sobre nós', to: '/sobre', icon: 'info', action: undefined },
+      { label: 'Sair', to: undefined, icon: 'logout', action: 'logout' },
+    ])
+  })
+
+  it('o Perfil leva ao perfil da pessoa logada', () => {
+    expect(getNavItems({ handle: 'maria' })[1].to).toBe('/perfil/maria')
+  })
+
+  it('deslogado: Feed, Sobre nós e Login, sem Perfil nem Sair', () => {
+    expect(getNavItems(null).map(({ label, to, icon }) => ({ label, to, icon }))).toEqual([
       { label: 'Feed', to: '/', icon: 'feed' },
-      { label: 'Perfil', to: '/perfil/julio', icon: 'account_circle' },
       { label: 'Sobre nós', to: '/sobre', icon: 'info' },
-      { label: 'Sair', to: '/login', icon: 'logout' },
+      { label: 'Login', to: '/login', icon: 'login' },
     ])
   })
 })
@@ -33,5 +46,11 @@ describe('isActive', () => {
 
   it('nunca marca Sair', () => {
     expect(isActive(entry('Sair'), '/login')).toBe(false)
+    expect(isActive(entry('Sair'), '/')).toBe(false)
+  })
+
+  it('marca Login em /login', () => {
+    const login = getNavItems(null).find((item) => item.label === 'Login')!
+    expect(isActive(login, '/login')).toBe(true)
   })
 })

@@ -1,5 +1,6 @@
 import { createBrowserRouter, type RouteObject } from 'react-router'
 import { AppLayout } from '../components/layout/AppLayout'
+import { RedirectIfAuthenticated, RequireAuth } from '../components/layout/RouteGuards'
 import { AboutPage } from '../pages/AboutPage'
 import { FeedPage } from '../pages/FeedPage'
 import { LoginPage } from '../pages/LoginPage'
@@ -14,8 +15,13 @@ import { SignupPage } from '../pages/SignupPage'
  * Telas internas ficam sob o AppLayout; Login e Cadastro ficam fora dele.
  */
 export const routes: RouteObject[] = [
-  { path: '/login', element: <LoginPage /> },
-  { path: '/cadastro', element: <SignupPage /> },
+  {
+    element: <RedirectIfAuthenticated />,
+    children: [
+      { path: '/login', element: <LoginPage /> },
+      { path: '/cadastro', element: <SignupPage /> },
+    ],
+  },
   {
     element: <AppLayout />,
     children: [
@@ -23,7 +29,7 @@ export const routes: RouteObject[] = [
       { path: 'projeto/:id', element: <ProjectPage /> },
       { path: 'perfil/:handle', element: <ProfilePage /> },
       { path: 'sobre', element: <AboutPage /> },
-      { path: 'publicar', element: <PublishPage /> },
+      { element: <RequireAuth />, children: [{ path: 'publicar', element: <PublishPage /> }] },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

@@ -1,6 +1,7 @@
-import { screen, within } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { routes } from '../app/router'
+import { stubFetch } from '../test/fetchStub'
 import { renderWithProviders } from '../test/renderWithProviders'
 
 const open = (route: string) => renderWithProviders(null, { routes, route })
@@ -40,7 +41,7 @@ describe('ProjectPage', () => {
     expect(screen.getByRole('button', { name: 'Ocultar respostas' })).toBeInTheDocument()
   })
 
-  it('comentar adiciona @voce ao fim, limpa o campo e atualiza o contador', async () => {
+  it('comentar adiciona a pessoa logada ao fim, limpa o campo e atualiza o contador', async () => {
     const { user } = open('/projeto/vendas')
     expect(within(card()).getByText('3')).toBeInTheDocument()
 
@@ -48,8 +49,8 @@ describe('ProjectPage', () => {
     expect(field).toHaveAttribute('placeholder', 'Escreva algo para @julio')
     await user.type(field, 'Excelente trabalho!{Enter}')
 
-    const handles = screen.getAllByText(/^@(ana\.souza|rafa\.dev|bia|voce|julio|carol)$/)
-    expect(handles.some((el) => el.textContent === '@voce')).toBe(true)
+    const entry = screen.getByText('Excelente trabalho!').closest('p')!
+    expect(within(entry).getByText('@julio')).toBeInTheDocument()
     expect(screen.getByText('Excelente trabalho!')).toBeInTheDocument()
     expect(field).toHaveValue('')
     expect(within(card()).getByText('4')).toBeInTheDocument()
@@ -60,7 +61,34 @@ describe('ProjectPage', () => {
     await user.click(screen.getByRole('button', { name: 'Comentar' }))
     await user.type(screen.getByLabelText('Seu comentário'), '   {Enter}')
     expect(within(card()).getByText('3')).toBeInTheDocument()
-    expect(screen.queryByText('@voce')).not.toBeInTheDocument()
+    expect(screen.queryByText('Excelente trabalho!')).not.toBeInTheDocument()
+  })
+
+  it('deslogado, troca o campo de comentário por um convite ao login e mantém a lista', () => {
+    renderWithProviders(null, { routes, route: '/projeto/vendas', viewer: null })
+    expect(screen.queryByLabelText('Seu comentário')).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Comentar' })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Faça login para comentar.' })).toHaveAttribute('href', '/login')
+    expect(screen.getByText('Salvei para estudar depois. Parabéns pelo projeto!')).toBeInTheDocument()
+    expect(within(card()).queryByRole('button', { name: /Aprovar/ })).not.toBeInTheDocument()
+  })
+
+  it('o convite leva ao login e, depois de entrar, volta ao projeto', async () => {
+    stubFetch({
+      'POST /api/auth/login': () => ({
+        json: { handle: 'maria', name: 'Maria Lima', initials: 'ML', avatarUrl: null },
+      }),
+    })
+    const { user, router } = renderWithProviders(null, { routes, route: '/projeto/vendas', viewer: null })
+
+    await user.click(screen.getByRole('link', { name: 'Faça login para comentar.' }))
+    expect(router.state.location.pathname).toBe('/login')
+
+    await user.type(screen.getByLabelText('Email ou usuário'), 'maria')
+    await user.type(screen.getByLabelText('Senha'), 'senha-segura')
+    await user.click(screen.getByRole('button', { name: 'Login' }))
+
+    await waitFor(() => expect(router.state.location.pathname).toBe('/projeto/vendas'))
   })
 
   it('"Voltar ao feed" navega para o feed, que mantém comentário e aprovação feitos', async () => {

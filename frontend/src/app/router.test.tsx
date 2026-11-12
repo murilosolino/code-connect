@@ -19,6 +19,21 @@ describe('rotas do app', () => {
     expect(document.title).toBe('Página não encontrada · CodeConnect')
   })
 
+  it('deslogado em /publicar, vai ao login', () => {
+    const { router } = renderWithProviders(null, { routes, route: '/publicar', viewer: null })
+    expect(router.state.location.pathname).toBe('/login')
+  })
+
+  it.each(['/', '/projeto/vendas', '/perfil/julio', '/sobre'])('deslogado pode abrir %s', (path) => {
+    const { router } = renderWithProviders(null, { routes, route: path, viewer: null })
+    expect(router.state.location.pathname).toBe(path)
+  })
+
+  it('logado abre /publicar', () => {
+    const { router } = renderWithProviders(null, { routes, route: '/publicar' })
+    expect(router.state.location.pathname).toBe('/publicar')
+  })
+
   it.each(KNOWN_PATHS)('não chama fetch ao renderizar %s', (path) => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch')
     renderWithProviders(null, { routes, route: path })

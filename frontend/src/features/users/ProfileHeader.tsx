@@ -1,4 +1,5 @@
 import { Avatar, Button } from '../../components/ui'
+import { useAuth } from '../../data/auth/useAuth'
 import type { UserView } from '../../data/types'
 import { pluralWord } from '../../lib/text'
 import { UserBadge } from './UserBadge'
@@ -10,6 +11,9 @@ type Props = {
 
 /** Cabeçalho do perfil: avatar ao lado do texto no desktop; empilhado e centralizado abaixo de 1024px. */
 export function ProfileHeader({ user, onToggleFollow }: Props) {
+  const { viewer } = useAuth()
+  // Seguir exige login e não faz sentido no próprio perfil.
+  const canFollow = viewer !== null && viewer.handle !== user.handle
   const stats = [
     { count: user.projectsCount, singular: 'Projeto', plural: 'Projetos' },
     { count: user.connectionsDisplayed, singular: 'Conexão', plural: 'Conexões' },
@@ -22,9 +26,11 @@ export function ProfileHeader({ user, onToggleFollow }: Props) {
         <div className="flex min-w-0 flex-col items-center gap-6 lg:flex-1 lg:items-start lg:gap-8">
           <div className="flex flex-wrap items-center justify-center gap-6 lg:justify-start lg:gap-8">
             <UserBadge handle={user.handle} initials={user.initials} size="lg" linked={false} />
-            <Button variant="tertiary" pressed={user.followedByViewer} onClick={onToggleFollow}>
-              {user.followedByViewer ? 'Seguindo' : 'Seguir'}
-            </Button>
+            {canFollow && (
+              <Button variant="tertiary" pressed={user.followedByViewer} onClick={onToggleFollow}>
+                {user.followedByViewer ? 'Seguindo' : 'Seguir'}
+              </Button>
+            )}
           </div>
           <div className="flex flex-col items-center gap-4 lg:items-start">
             <h1 className="text-subtitle font-semibold break-words text-accent">{user.name}</h1>

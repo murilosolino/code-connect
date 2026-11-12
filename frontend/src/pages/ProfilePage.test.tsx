@@ -23,16 +23,29 @@ describe('ProfilePage', () => {
     expect(document.title).toBe('Júlio Oliveira · CodeConnect')
   })
 
-  it('"Seguir" vira "Seguindo" e as conexões vão de 25 para 26, e voltam', async () => {
-    const { user } = open('julio')
+  it('"Seguir" vira "Seguindo" e as conexões vão de 48 para 49, e voltam', async () => {
+    const { user } = open('ana.souza')
 
     await user.click(screen.getByRole('button', { name: 'Seguir' }))
     expect(screen.getByRole('button', { name: 'Seguindo' })).toHaveAttribute('aria-pressed', 'true')
-    expect(stats()[1]).toBe('26 Conexões')
+    expect(stats()[1]).toBe('49 Conexões')
 
     await user.click(screen.getByRole('button', { name: 'Seguindo' }))
     expect(screen.getByRole('button', { name: 'Seguir' })).toBeInTheDocument()
-    expect(stats()[1]).toBe('25 Conexões')
+    expect(stats()[1]).toBe('48 Conexões')
+  })
+
+  it('no próprio perfil não há "Seguir"', () => {
+    open('julio')
+    expect(screen.queryByRole('button', { name: 'Seguir' })).not.toBeInTheDocument()
+  })
+
+  it('deslogado vê o perfil sem "Seguir" e sem projetos aprovados', async () => {
+    const { user } = renderWithProviders(null, { routes, route: '/perfil/julio', viewer: null })
+    expect(screen.getByRole('heading', { level: 1, name: 'Júlio Oliveira' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Seguir' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: 'Aprovados' }))
+    expect(screen.getByText('Nenhum projeto aprovado ainda.')).toBeInTheDocument()
   })
 
   it('a aba "Projetos" lista os projetos da pessoa', () => {

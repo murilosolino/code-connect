@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { email, loginSchema, projectSchema, required, signupSchema, validate } from './validation'
+import { email, loginSchema, minLength, projectSchema, required, signupSchema, validate } from './validation'
 
 describe('required', () => {
   it('devolve a mensagem para vazio e para só espaços', () => {
@@ -9,6 +9,15 @@ describe('required', () => {
 
   it('devolve null quando há conteúdo', () => {
     expect(required('Msg')('x')).toBeNull()
+  })
+})
+
+describe('minLength', () => {
+  it('conta caracteres (pontos de código), não bytes', () => {
+    expect(minLength(3, 'Msg')('ab')).toBe('Msg')
+    expect(minLength(3, 'Msg')('abc')).toBeNull()
+    expect(minLength(3, 'Msg')('ééé')).toBeNull()
+    expect(minLength(2, 'Msg')('😀😀')).toBeNull()
   })
 })
 
@@ -89,12 +98,20 @@ describe('signupSchema', () => {
   })
 
   it('valida o formato do email', () => {
-    expect(validate(signupSchema, { name: 'Ana', email: 'ana@', password: 'x' })).toEqual({
+    expect(validate(signupSchema, { name: 'Ana', email: 'ana@', password: 'senha-segura' })).toEqual({
       email: 'Digite um email válido.',
     })
   })
 
+  it('exige ao menos 8 caracteres na senha, contando letras e não bytes', () => {
+    const errors = (password: string) => validate(signupSchema, { name: 'Ana', email: 'ana@ex.com', password })
+    expect(errors('1234567')).toEqual({ password: 'Use ao menos 8 caracteres.' })
+    expect(errors('12345678')).toEqual({})
+    expect(errors('éééééééé')).toEqual({})
+    expect(errors('       ')).toEqual({ password: 'Informe sua senha.' })
+  })
+
   it('aceita os dados preenchidos', () => {
-    expect(validate(signupSchema, { name: 'Ana', email: 'ana@ex.com', password: 'x' })).toEqual({})
+    expect(validate(signupSchema, { name: 'Ana', email: 'ana@ex.com', password: 'senha-segura' })).toEqual({})
   })
 })

@@ -70,6 +70,15 @@ describe('PostCard (feed)', () => {
   })
 })
 
+describe('PostCard (deslogado)', () => {
+  it('mostra o contador de aprovações, mas sem o botão de aprovar', () => {
+    renderWithProviders(<PostCard post={vendas} size="feed" />, { viewer: null })
+    expect(screen.queryByRole('button', { name: /Aprovar/ })).not.toBeInTheDocument()
+    expect(screen.getByText('Aprovações')).toBeInTheDocument()
+    expect(screen.getByText('32')).toBeInTheDocument()
+  })
+})
+
 describe('PostCard (página)', () => {
   it('mostra a descrição completa e o título sem link', () => {
     renderWithProviders(<PostCard post={vendas} size="page" headingLevel={1} />)

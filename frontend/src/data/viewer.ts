@@ -1,5 +1,2 @@
-/** Pessoa logada de exemplo. Na integração com a API isto passa a vir da sessão. */
+/** Pessoa logada do seed. Na aplicação a pessoa vem da sessão (`data/auth`); isto só povoa o seed. */
 export const VIEWER_HANDLE = 'julio'
-
-/** Autoria dos comentários criados na sessão (como no protótipo do Detalhe). */
-export const COMMENT_AUTHOR = { handle: 'voce', initials: 'V' } as const
