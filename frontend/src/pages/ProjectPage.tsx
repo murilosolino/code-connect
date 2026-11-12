@@ -1,0 +1,51 @@
+import { useParams } from 'react-router'
+import { NotFoundState, TextLink } from '../components/ui'
+import { useAuth } from '../data/auth/useAuth'
+import { useAppActions, useComments, usePost } from '../data/store/hooks'
+import { CommentForm } from '../features/comments/CommentForm'
+import { CommentThread } from '../features/comments/CommentThread'
+import { PostCard } from '../features/posts/PostCard'
+import { usePageTitle } from '../hooks/usePageTitle'
+import { formatHandle } from '../lib/text'
+
+/** Detalhe do projeto: card em versão de página, aprovação e comentários. */
+export function ProjectPage() {
+  const { id = '' } = useParams()
+  const post = usePost(id)
+  const comments = useComments(id)
+  const { addComment } = useAppActions()
+  const { viewer } = useAuth()
+  usePageTitle(post?.title ?? 'Projeto não encontrado')
+
+  if (!post) {
+    return (
+      <NotFoundState
+        title="Projeto não encontrado"
+        description="Confira o endereço ou volte ao feed para ver outros projetos."
+      />
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <TextLink to="/" icon="arrow_back" className="self-start">
+        Voltar ao feed
+      </TextLink>
+      <PostCard post={post} size="page" headingLevel={1} />
+      <section id="comentarios" className="flex flex-col gap-4 pt-4">
+        <h2 className="text-subtitle text-text-primary">Comentários</h2>
+        {viewer ? (
+          <CommentForm
+            onSubmit={(text) => addComment(post.id, text)}
+            placeholder={`Escreva algo para ${formatHandle(post.author.handle)}`}
+          />
+        ) : (
+          <TextLink variant="accent" to="/login" state={{ from: `/projeto/${post.id}` }} className="self-start">
+            Faça login para comentar.
+          </TextLink>
+        )}
+        <CommentThread comments={comments} />
+      </section>
+    </div>
+  )
+}

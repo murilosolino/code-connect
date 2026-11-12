@@ -34,6 +34,14 @@ services:
       DB_PASSWORD: ${MYSQL_PASSWORD}
       DB_NAME: ${MYSQL_DATABASE}
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+      JWT_SECRET: ${JWT_SECRET:?defina JWT_SECRET no .env (veja .env.example)}
+      JWT_TTL: ${JWT_TTL:-24h}
+      JWT_REMEMBER_TTL: ${JWT_REMEMBER_TTL:-720h}
+      BCRYPT_COST: ${BCRYPT_COST:-12}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-true}
+      # Só para os testes de integração, que criam e apagam um database próprio.
+      TEST_DB_DSN: root:${MYSQL_ROOT_PASSWORD}@tcp(mysql:3306)/?parseTime=true&charset=utf8mb4&loc=UTC
     ports:
       - "${API_PORT:-8080}:${API_PORT:-8080}"
     volumes:

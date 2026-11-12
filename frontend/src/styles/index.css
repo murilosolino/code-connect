@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+@layer base {
+  body {
+    margin: 0;
+    background-color: var(--color-bg-page);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+  }
+
+  button,
+  input,
+  textarea {
+    font-family: inherit;
+  }
+
+  /* Foco visível padrão: anel sólido de 2px com offset de 2px (Princípio III).
+     O SearchBox substitui por borda inset de 1px. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Ícones: Material Symbols usados como ligadura de texto (ver componente Icon).
+   A fonte vem do <link> do index.html. Usamos uma classe própria (como o `.mi` do protótipo) e
+   não `.material-symbols-outlined`: a folha do Google define `font-size: 24px` sem layer, o que
+   venceria os utilitários de tamanho do Tailwind (text-icon-sm/md/lg). */
+.material-icon {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}

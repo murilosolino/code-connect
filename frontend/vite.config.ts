@@ -1,4 +1,5 @@
-import { defineConfig } from 'vite'
+/// <reference types="node" />
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
@@ -14,5 +15,11 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    // user-event em container compartilhado com o Vite pode passar dos 5s padrão sob carga.
+    testTimeout: 15000,
   },
 })
