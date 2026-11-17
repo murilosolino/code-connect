@@ -1,9 +1,13 @@
 .DEFAULT_GOAL := help
 DC := docker compose
 
+FUZZTIME ?= 30s
+FUZZ_TARGETS := FuzzValidateSignup:./internal/auth FuzzGenerateHandle:./internal/auth \
+                FuzzInitials:./internal/auth FuzzVerifyToken:./internal/auth FuzzLoginBody:./internal/handlers
+
 .PHONY: help up down start stop restart build rebuild logs logs-backend logs-frontend logs-mysql ps \
         db-cli db-root db-dump db-restore db-reset sh-backend sh-frontend \
-        backend-tidy backend-test frontend-install frontend-lint clean prod-build hooks-install
+        backend-tidy backend-test backend-fuzz backend-bench swagger frontend-install frontend-lint frontend-test clean prod-build hooks-install
 
 help: ## Lista os comandos disponíveis
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-18s\033[0m %s\n", $$1, $$2}'
@@ -76,11 +80,27 @@ backend-tidy: ## go mod tidy no container
 backend-test: ## Roda os testes do backend (com --race)
 	$(DC) exec -e CGO_ENABLED=1 backend go test --race ./...
 
+backend-fuzz: ## Roda os alvos de fuzzing: make backend-fuzz FUZZTIME=1m
+	@for entry in $(FUZZ_TARGETS); do \
+		target=$${entry%%:*}; pkg=$${entry##*:}; \
+		echo "==> $$target ($(FUZZTIME))"; \
+		$(DC) exec -T -e CGO_ENABLED=1 backend go test --race -run='^$$' -fuzz="^$$target$$" -fuzztime=$(FUZZTIME) $$pkg || exit 1; \
+	done
+
+backend-bench: ## Roda os benchmarks do backend
+	$(DC) exec -T backend go test -run='^$$' -bench=. -benchmem ./...
+
+swagger: ## Regenera a documentação Swagger (backend/docs)
+	$(DC) exec -T backend go tool swag init -g cmd/api/main.go -o docs
+
 frontend-install: ## Instala dependência: make frontend-install pkg=nome
 	$(DC) exec frontend npm install $(pkg)
 
 frontend-lint: ## Checagem de tipos do frontend
 	$(DC) exec frontend npm run lint
+
+frontend-test: ## Roda os testes do frontend (Vitest)
+	$(DC) exec frontend npm test
 
 prod-build: ## Builda as imagens de produção (target prod)
 	docker build --target prod -t code-connect-backend:prod ./backend

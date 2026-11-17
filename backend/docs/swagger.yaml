@@ -1,0 +1,225 @@
+basePath: /api
+definitions:
+  apierror.Body:
+    properties:
+      error:
+        $ref: '#/definitions/apierror.Detail'
+    type: object
+  apierror.Detail:
+    properties:
+      code:
+        example: validation_failed
+        type: string
+      fields:
+        additionalProperties:
+          type: string
+        type: object
+      message:
+        example: Confira os campos destacados.
+        type: string
+    type: object
+  handlers.LoginRequest:
+    properties:
+      identifier:
+        example: maria@example.com
+        type: string
+      password:
+        example: senha-segura
+        type: string
+      remember:
+        example: false
+        type: boolean
+    type: object
+  handlers.SignupRequest:
+    properties:
+      email:
+        example: maria@example.com
+        type: string
+      name:
+        example: Maria Lima
+        type: string
+      password:
+        example: senha-segura
+        type: string
+      remember:
+        example: false
+        type: boolean
+    type: object
+  handlers.Viewer:
+    properties:
+      avatarUrl:
+        type: string
+      handle:
+        example: maria
+        type: string
+      initials:
+        example: ML
+        type: string
+      name:
+        example: Maria Lima
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API da rede CodeConnect. A sessão é um JWT em cookie httpOnly.
+  title: CodeConnect API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Credenciais
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            Set-Cookie:
+              description: 'cc_session: JWT httpOnly'
+              type: string
+          schema:
+            $ref: '#/definitions/handlers.Viewer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "413":
+          description: Request Entity Too Large
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apierror.Body'
+      summary: Abre a sessão com email ou usuário e senha
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apierror.Body'
+      security:
+      - CookieAuth: []
+      summary: Encerra a sessão e invalida o token
+      tags:
+      - auth
+  /auth/me:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Viewer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apierror.Body'
+      security:
+      - CookieAuth: []
+      summary: Devolve a pessoa logada
+      tags:
+      - auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Dados do cadastro
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.SignupRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          headers:
+            Set-Cookie:
+              description: 'cc_session: JWT httpOnly'
+              type: string
+          schema:
+            $ref: '#/definitions/handlers.Viewer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "413":
+          description: Request Entity Too Large
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/apierror.Body'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/apierror.Body'
+      summary: Cria uma conta e abre a sessão
+      tags:
+      - auth
+  /health:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "503":
+          description: Service Unavailable
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Verifica a saúde da API e do banco
+      tags:
+      - health
+securityDefinitions:
+  CookieAuth:
+    in: cookie
+    name: cc_session
+    type: apiKey
+swagger: "2.0"

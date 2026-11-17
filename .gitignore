@@ -1,2 +1,4 @@
 .env
 .DS_Store
+codeconnect-design/
+__pycache__/

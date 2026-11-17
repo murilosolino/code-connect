@@ -1,0 +1,131 @@
+name: CI
+
+# Gates obrigatórios da constituição antes do merge na master:
+# backend (fmt, vet, testes --race com MySQL), frontend (tsc + testes) e build de produção.
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend-lint:
+    name: Backend · lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+
+      - name: go fmt (nenhum arquivo pode mudar)
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "Arquivos sem formatação (rode go fmt ./...):"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: go mod tidy (go.mod/go.sum devem estar em dia)
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum
+
+      - name: Swagger em dia (make swagger)
+        run: |
+          go tool swag init -g cmd/api/main.go -o docs
+          git diff --exit-code -- docs
+
+  backend-test:
+    name: Backend · testes (--race)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Mesmo ambiente do desenvolvimento: docker-compose.yml (mysql:latest, imagem dev
+      # com gcc para o --race e TEST_DB_DSN) e as variáveis do .env.example.
+      - name: Criar .env
+        run: cp .env.example .env
+
+      # `run` sobe o MySQL (espera ficar healthy) e executa o comando no lugar do air.
+      # Unidade + integração + corpus semente do fuzzing (equivale a `make backend-test`).
+      - name: go test --race
+        run: docker compose run --rm -T -e CGO_ENABLED=1 backend go test --race ./...
+
+      - name: Logs do MySQL (em caso de falha)
+        if: failure()
+        run: docker compose logs mysql
+
+      - name: Derrubar serviços
+        if: always()
+        run: docker compose down -v
+
+  frontend:
+    name: Frontend · lint e testes
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Type check (tsc -b --noEmit)
+        run: npm run lint
+
+      - name: Testes (vitest)
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  docker-build:
+    name: Build de produção (Docker)
+    runs-on: ubuntu-latest
+    needs: [backend-lint, backend-test, frontend]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Backend (target prod)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          target: prod
+          push: false
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,mode=max,scope=backend
+
+      - name: Frontend (target prod)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          target: prod
+          push: false
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,mode=max,scope=frontend
